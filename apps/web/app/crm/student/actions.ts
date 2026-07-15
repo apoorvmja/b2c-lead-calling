@@ -67,17 +67,25 @@ export async function createStudentFollowUp(
   studentId: string,
   formData: FormData
 ) {
-  await prisma.studentFollowUp.create({
-    data: {
-      studentId,
-      status: formData.get("status") as string,
-      remarks: formData.get("remarks") as string,
-      followUp: formData.get("followUp") === "on",
-      followUpDate: formData.get("followUpDate")
-        ? new Date(formData.get("followUpDate") as string)
-        : null,
-    },
-  });
+  const status = formData.get("status") as string;
+
+  await prisma.$transaction([
+    prisma.studentFollowUp.create({
+      data: {
+        studentId,
+        status,
+        remarks: formData.get("remarks") as string,
+        followUp: formData.get("followUp") === "on",
+        followUpDate: formData.get("followUpDate")
+          ? new Date(formData.get("followUpDate") as string)
+          : null,
+      },
+    }),
+    prisma.student.update({
+      where: { id: studentId },
+      data: { status },
+    }),
+  ]);
 
   revalidatePath(`/crm/student/${studentId}/edit`);
 }
