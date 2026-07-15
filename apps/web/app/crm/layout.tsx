@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import {
   BarChart3,
   BookOpen,
@@ -6,6 +7,7 @@ import {
   Database,
   FileText,
   Home,
+  Layers3,
   MoreHorizontal,
   Plus,
   Search,
@@ -42,6 +44,17 @@ const documentNav = [
   { title: "Data Library", icon: Database, active: true },
   { title: "Reports", icon: FileText },
   { title: "Knowledge Base", icon: BookOpen },
+];
+
+const masterNav = [
+  { title: "Countries", href: "/crm/master/countries" },
+  { title: "Courses", href: "/crm/master/courses" },
+  { title: "Education Levels", href: "/crm/master/education-levels" },
+  { title: "English Tests", href: "/crm/master/english-tests" },
+  { title: "Inquiry Sources", href: "/crm/master/inquiry-sources" },
+  { title: "Intakes", href: "/crm/master/intakes" },
+  { title: "Interested Fields", href: "/crm/master/interested-fields" },
+  { title: "Status", href: "/crm/master/status" },
 ];
 
 export default function CrmLayout({ children }: { children: ReactNode }) {
@@ -95,6 +108,22 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
                           <MoreHorizontal />
                         </SidebarMenuAction>
                       ) : null}
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>Master</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {masterNav.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton render={<Link href={item.href} />}>
+                        <Layers3 />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>
