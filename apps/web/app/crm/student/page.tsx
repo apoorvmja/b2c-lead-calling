@@ -64,13 +64,14 @@ export default async function StudentPage() {
                 <TableHead>Status</TableHead>
                 <TableHead>Intake</TableHead>
                 <TableHead>Assigned To</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {students.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={8}
+                    colSpan={9}
                     className="h-24 text-center text-muted-foreground"
                   >
                     No students added yet.
@@ -94,6 +95,16 @@ export default async function StudentPage() {
                     <TableCell>{student.intake}</TableCell>
                     <TableCell>
                       {student.assignedToUser?.fullName ?? "Unassigned"}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        nativeButton={false}
+                        variant="outline"
+                        size="sm"
+                        render={<Link href={`/crm/student/${student.id}/edit`} />}
+                      >
+                        Edit
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
