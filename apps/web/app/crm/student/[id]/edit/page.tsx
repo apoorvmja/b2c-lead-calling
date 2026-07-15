@@ -5,6 +5,7 @@ import { prisma } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 
+import { StudentFollowUpsCard } from "../../_components/student-follow-ups-card";
 import { StudentForm } from "../../_components/student-form";
 import { updateStudent } from "../../actions";
 
@@ -14,7 +15,10 @@ export default async function EditStudentPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const student = await prisma.student.findUnique({ where: { id } });
+  const student = await prisma.student.findUnique({
+    where: { id },
+    include: { followUps: { orderBy: { createdAt: "desc" } } },
+  });
 
   if (!student) {
     notFound();
@@ -51,6 +55,11 @@ export default async function EditStudentPage({
         users={users}
         student={student}
         submitLabel="Update Student"
+      />
+
+      <StudentFollowUpsCard
+        studentId={student.id}
+        followUps={student.followUps}
       />
     </>
   );

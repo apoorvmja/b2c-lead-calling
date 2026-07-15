@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@repo/db";
 
 function studentData(formData: FormData) {
@@ -60,4 +61,23 @@ export async function updateStudent(id: string, formData: FormData) {
   });
 
   redirect("/crm/student");
+}
+
+export async function createStudentFollowUp(
+  studentId: string,
+  formData: FormData
+) {
+  await prisma.studentFollowUp.create({
+    data: {
+      studentId,
+      status: formData.get("status") as string,
+      remarks: formData.get("remarks") as string,
+      followUp: formData.get("followUp") === "on",
+      followUpDate: formData.get("followUpDate")
+        ? new Date(formData.get("followUpDate") as string)
+        : null,
+    },
+  });
+
+  revalidatePath(`/crm/student/${studentId}/edit`);
 }

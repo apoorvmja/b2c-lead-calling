@@ -70,5 +70,22 @@ model Student {
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
+  followUps        StudentFollowUp[]
+
   @@map("student")
+}
+
+model StudentFollowUp {
+  id           String    @id @default(uuid())
+
+  studentId    String    @map("student_id")
+  student      Student   @relation(fields: [studentId], references: [id])
+  
+  status       String
+  remarks      String?
+  followUp     Boolean   @default(false) @map("follow_up")
+  followUpDate DateTime? @map("follow_up_date")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@map("student_follow_up")
 }
