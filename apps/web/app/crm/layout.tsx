@@ -35,9 +35,13 @@ import {
 
 const primaryNav = [
   { title: "Dashboard", icon: Home, href: "/crm", active: true },
-  { title: "Leads", icon: ClipboardList, href: "/crm/lead" },
   { title: "Analytics", icon: BarChart3, href: "/crm" },
   { title: "Students", icon: Users, href: "/crm/student" },
+];
+
+const leadNav = [
+  { title: "Lead Details", href: "/crm/lead" },
+  { title: "Unallocated Leads", href: "/crm/lead/unallocated" },
 ];
 
 const documentNav = [
@@ -89,6 +93,22 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
                         render={<Link href={item.href} />}
                       >
                         <item.icon />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>Leads</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {leadNav.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton render={<Link href={item.href} />}>
+                        <ClipboardList />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
