@@ -6,8 +6,8 @@ import {
   ENGLISH_TESTS,
   INTAKES,
   INTERESTED_FIELDS,
-  LEAD_STATUS,
   SOURCES,
+  STUDENT_STATUS,
 } from "@repo/shared";
 
 import { Button } from "@/components/ui/button";
@@ -196,7 +196,7 @@ export function StudentForm({
           <SelectField
             name="status"
             label="Status"
-            data={LEAD_STATUS}
+            data={STUDENT_STATUS}
             defaultValue={student?.status}
             required
           />

@@ -1,5 +1,5 @@
 import type { StudentFollowUp } from "@repo/db";
-import { LEAD_STATUS } from "@repo/shared";
+import { STUDENT_STATUS } from "@repo/shared";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -50,7 +50,7 @@ export function StudentFollowUpsCard({
         <form action={action} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <select name="status" required className={selectClassName}>
             <option value="">Select status</option>
-            {Object.values(LEAD_STATUS).map((status) => (
+            {Object.values(STUDENT_STATUS).map((status) => (
               <option key={status} value={status}>
                 {status}
               </option>

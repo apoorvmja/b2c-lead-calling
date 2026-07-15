@@ -6,4 +6,4 @@ export { SOURCES } from "./inquiry-sources";
 export { INTAKES } from "./intakes";
 export { INTERESTED_FIELDS } from "./intrested-fields";
 export { USER_ROLES, type UserRole } from "./roles";
-export { LEAD_STATUS } from "./status";
+export { LEAD_STATUS, STUDENT_STATUS, type StudentStatus } from "./status";

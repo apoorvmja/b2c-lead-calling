@@ -58,7 +58,23 @@ model Lead {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
+  history          LeadHistory[]
+
   @@map("lead")
+}
+
+model LeadHistory {
+  id        String   @id @default(uuid())
+
+  leadId    String   @map("lead_id")
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  status    String
+  activity  String
+  remarks   String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("lead_history")
 }
 
 model Student {
