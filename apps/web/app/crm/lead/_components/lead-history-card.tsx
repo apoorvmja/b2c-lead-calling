@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 
 import { createLeadHistory } from "../actions";
 
@@ -63,6 +64,15 @@ export function LeadHistoryCard({
               </option>
             ))}
           </select>
+          <label className="flex h-8 items-center gap-2 text-sm">
+            <input
+              name="followUp"
+              type="checkbox"
+              className="size-4 rounded border-input"
+            />
+            <span className="font-medium">Follow up required</span>
+          </label>
+          <Input name="followUpDate" type="date" />
           <div className="md:col-span-2 xl:col-span-4">
             <textarea
               name="remarks"
@@ -80,6 +90,8 @@ export function LeadHistoryCard({
             <TableRow>
               <TableHead>Status</TableHead>
               <TableHead>Activity</TableHead>
+              <TableHead>Follow Up</TableHead>
+              <TableHead>Follow Up Date</TableHead>
               <TableHead>Remarks</TableHead>
               <TableHead>Created</TableHead>
             </TableRow>
@@ -88,7 +100,7 @@ export function LeadHistoryCard({
             {history.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={4}
+                  colSpan={6}
                   className="h-24 text-center text-muted-foreground"
                 >
                   No lead history added yet.
@@ -99,6 +111,8 @@ export function LeadHistoryCard({
                 <TableRow key={entry.id}>
                   <TableCell className="font-medium">{entry.status}</TableCell>
                   <TableCell>{entry.activity}</TableCell>
+                  <TableCell>{entry.followUp ? "Yes" : "No"}</TableCell>
+                  <TableCell>{formatDate(entry.followUpDate)}</TableCell>
                   <TableCell className="max-w-sm whitespace-normal">
                     {entry.remarks || "-"}
                   </TableCell>

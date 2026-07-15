@@ -45,6 +45,10 @@ export async function createLeadHistory(leadId: string, formData: FormData) {
         status,
         activity: formData.get("activity") as string,
         remarks: formData.get("remarks") as string,
+        followUp: formData.get("followUp") === "on",
+        followUpDate: formData.get("followUpDate")
+          ? new Date(formData.get("followUpDate") as string)
+          : null,
       },
     }),
     prisma.lead.update({

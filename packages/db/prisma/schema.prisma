@@ -72,6 +72,8 @@ model LeadHistory {
   status    String
   activity  String
   remarks   String?
+  followUp  Boolean  @default(false) @map("follow_up")
+  followUpDate DateTime? @map("follow_up_date")
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("lead_history")
