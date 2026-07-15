@@ -47,6 +47,7 @@ const documentNav = [
 ];
 
 const masterNav = [
+  { title: "Users", href: "/crm/master/users" },
   { title: "Countries", href: "/crm/master/countries" },
   { title: "Courses", href: "/crm/master/courses" },
   { title: "Education Levels", href: "/crm/master/education-levels" },
