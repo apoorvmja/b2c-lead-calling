@@ -1,0 +1,135 @@
+import type { ReactNode } from "react";
+import {
+  BarChart3,
+  BookOpen,
+  ClipboardList,
+  Database,
+  FileText,
+  Home,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Settings2,
+  Users,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+
+const primaryNav = [
+  { title: "Dashboard", icon: Home, active: true },
+  { title: "Leads", icon: ClipboardList },
+  { title: "Analytics", icon: BarChart3 },
+  { title: "Students", icon: Users },
+];
+
+const documentNav = [
+  { title: "Data Library", icon: Database, active: true },
+  { title: "Reports", icon: FileText },
+  { title: "Knowledge Base", icon: BookOpen },
+];
+
+export default function CrmLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="dark min-h-svh bg-background text-foreground">
+      <SidebarProvider>
+        <Sidebar collapsible="icon">
+          <SidebarHeader className="border-b border-sidebar-border p-3">
+            <div className="flex h-9 items-center gap-2 px-1">
+              <div className="flex size-7 items-center justify-center rounded-md border border-sidebar-border bg-sidebar-accent">
+                <span className="text-xs font-semibold">GG</span>
+              </div>
+              <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+                <p className="truncate text-sm font-medium">GoGlobal CRM</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  Lead operations
+                </p>
+              </div>
+            </div>
+          </SidebarHeader>
+
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Home</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {primaryNav.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton isActive={item.active}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>Documents</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {documentNav.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton isActive={item.active}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                      {item.active ? (
+                        <SidebarMenuAction aria-label="More actions">
+                          <MoreHorizontal />
+                        </SidebarMenuAction>
+                      ) : null}
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+          <SidebarRail />
+        </Sidebar>
+
+        <SidebarInset>
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur">
+            <SidebarTrigger />
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <h1 className="truncate text-sm font-medium">CRM Dashboard</h1>
+            </div>
+            <Button variant="outline" size="sm" className="hidden sm:flex">
+              <Search />
+              Search
+            </Button>
+            <Button size="sm">
+              <Plus />
+              New
+            </Button>
+            <Button variant="ghost" size="icon-sm" aria-label="Settings">
+              <Settings2 />
+            </Button>
+          </header>
+
+          <main className="flex-1 overflow-auto">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 md:p-6">
+              {children}
+            </div>
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
+  );
+}

@@ -1,0 +1,15 @@
+export const INTERESTED_FIELDS = {
+    SCIENCE: "Science",
+    MEDICAL: "Medical",
+    COMMERCE: "Commerce",
+    ARTS_AND_LITERATURE: "Arts and Literature",
+    ENGINEERING: "Engineering",
+    COMPUTER_DEVELOPMENT: "Computer Development",
+    DATA_SCIENCE: "Data Science",
+    SCIENCE_AND_TECHNOLOGY: "Science and Technology",
+    BUSINESS_AND_MANAGEMENT: "Business and Management",
+    HEALTH_AND_MEDICINE: "Health and Medicine",
+    ENGINEERING_AND_TECHNOLOGY: "Engineering and Technology",
+    MBBS: "MBBS",
+    LAW: "Law",
+} as const;
