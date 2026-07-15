@@ -268,40 +268,6 @@ export function StudentForm({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Follow Up</CardTitle>
-          <CardDescription>Optional follow-up tracking</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <label className="flex h-8 items-center gap-2 text-sm">
-            <input
-              name="followUp"
-              type="checkbox"
-              defaultChecked={student?.followUp ?? false}
-              className="size-4 rounded border-input"
-            />
-            <span className="font-medium">Follow up required</span>
-          </label>
-          <Field label="Follow Up Date">
-            <Input
-              name="followUpDate"
-              type="date"
-              defaultValue={formatDate(student?.followUpDate)}
-            />
-          </Field>
-          <div className="md:col-span-2 xl:col-span-3">
-            <Field label="Follow Up Remark">
-              <textarea
-                name="followUpRemark"
-                defaultValue={student?.followUpRemark ?? ""}
-                className={textareaClassName}
-              />
-            </Field>
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="flex justify-end gap-2">
         <Button
           nativeButton={false}

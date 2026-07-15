@@ -36,12 +36,6 @@ function studentData(formData: FormData) {
 
     details: formData.get("details") as string,
 
-    followUp: formData.get("followUp") === "on",
-    followUpDate: formData.get("followUpDate")
-      ? new Date(formData.get("followUpDate") as string)
-      : null,
-    followUpRemark: formData.get("followUpRemark") as string,
-
     englishTest: formData.get("englishTest") as string,
   };
 }

@@ -63,9 +63,6 @@ model Student {
   
   intake           String
   details          String?
-  followUp         Boolean   @default(false) @map("follow_up")
-  followUpDate     DateTime? @map("follow_up_date")
-  followUpRemark   String?   @map("follow_up_remark")
   englishTest      String?   @map("english_test")
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
