@@ -66,13 +66,14 @@ export default async function LeadPage() {
                 <TableHead>Status</TableHead>
                 <TableHead>Interested Field</TableHead>
                 <TableHead>Assigned To</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {leads.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={7}
+                    colSpan={8}
                     className="h-24 text-center text-muted-foreground"
                   >
                     No leads added yet.
@@ -89,6 +90,16 @@ export default async function LeadPage() {
                     <TableCell>{lead.interestedField || "-"}</TableCell>
                     <TableCell>
                       {lead.assignedToUser?.fullName ?? "Unassigned"}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        nativeButton={false}
+                        variant="outline"
+                        size="sm"
+                        render={<Link href={`/crm/lead/${lead.id}/edit`} />}
+                      >
+                        Edit
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

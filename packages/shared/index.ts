@@ -5,5 +5,6 @@ export { ENGLISH_TESTS } from "./english-tests";
 export { SOURCES } from "./inquiry-sources";
 export { INTAKES } from "./intakes";
 export { INTERESTED_FIELDS } from "./intrested-fields";
+export { LEAD_ACTIVITIES, type LeadActivity } from "./lead-activities";
 export { USER_ROLES, type UserRole } from "./roles";
 export { LEAD_STATUS, STUDENT_STATUS, type StudentStatus } from "./status";

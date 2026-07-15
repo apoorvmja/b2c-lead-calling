@@ -1,25 +1,58 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import { prisma } from "@repo/db";
 
+function leadData(formData: FormData) {
+  return {
+    name: formData.get("name") as string,
+    phone: formData.get("phone") as string,
+    email: formData.get("email") as string,
+    address: formData.get("address") as string,
+    source: formData.get("source") as string,
+    assignedToUserId: formData.get("assignedToUserId") as string,
+    interestedField: formData.get("interestedField") as string,
+    country: formData.get("country") as string,
+    purpose: formData.get("purpose") as string,
+    status: formData.get("status") as string,
+    englishTest: formData.get("englishTest") as string,
+  };
+}
+
 export async function createLead(formData: FormData) {
-  await prisma.lead.create({
-    data: {
-      name: formData.get("name") as string,
-      phone: formData.get("phone") as string,
-      email: formData.get("email") as string,
-      address: formData.get("address") as string,
-      source: formData.get("source") as string,
-      assignedToUserId: formData.get("assignedToUserId") as string,
-      interestedField: formData.get("interestedField") as string,
-      country: formData.get("country") as string,
-      purpose: formData.get("purpose") as string,
-      status: formData.get("status") as string,
-      englishTest: formData.get("englishTest") as string,
-    },
+  await prisma.lead.create({ data: leadData(formData) });
+  redirect("/crm/lead");
+}
+
+export async function updateLead(id: string, formData: FormData) {
+  await prisma.lead.update({
+    where: { id },
+    data: leadData(formData),
   });
 
   redirect("/crm/lead");
+}
+
+export async function createLeadHistory(leadId: string, formData: FormData) {
+  const status = formData.get("status") as string;
+
+  await prisma.$transaction([
+    prisma.leadHistory.create({
+      data: {
+        leadId,
+        status,
+        activity: formData.get("activity") as string,
+        remarks: formData.get("remarks") as string,
+      },
+    }),
+    prisma.lead.update({
+      where: { id: leadId },
+      data: { status },
+    }),
+  ]);
+
+  revalidatePath(`/crm/lead/${leadId}/edit`);
+  revalidatePath("/crm/lead");
 }
