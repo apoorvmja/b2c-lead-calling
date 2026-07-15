@@ -35,7 +35,7 @@ import {
 
 const primaryNav = [
   { title: "Dashboard", icon: Home, href: "/crm", active: true },
-  { title: "Leads", icon: ClipboardList, href: "/crm" },
+  { title: "Leads", icon: ClipboardList, href: "/crm/lead" },
   { title: "Analytics", icon: BarChart3, href: "/crm" },
   { title: "Students", icon: Users, href: "/crm/student" },
 ];

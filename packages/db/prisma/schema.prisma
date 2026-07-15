@@ -34,8 +34,31 @@ model User {
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
   assignedStudents Student[]
+  assignedLeads    Lead[]
 
   @@map("user")
+}
+
+model Lead {
+  id               String   @id @default(uuid())
+  name             String
+  phone            String
+  email            String?
+  address          String?
+  source           String
+
+  assignedToUserId String?  @map("assigned_to_user_id")
+  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
+
+  interestedField  String?  @map("interested_field")
+  country          String
+  purpose          String?
+  status           String
+  englishTest      String?  @map("english_test")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("lead")
 }
 
 model Student {
