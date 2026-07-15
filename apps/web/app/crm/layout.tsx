@@ -34,10 +34,10 @@ import {
 } from "@/components/ui/sidebar";
 
 const primaryNav = [
-  { title: "Dashboard", icon: Home, active: true },
-  { title: "Leads", icon: ClipboardList },
-  { title: "Analytics", icon: BarChart3 },
-  { title: "Students", icon: Users },
+  { title: "Dashboard", icon: Home, href: "/crm", active: true },
+  { title: "Leads", icon: ClipboardList, href: "/crm" },
+  { title: "Analytics", icon: BarChart3, href: "/crm" },
+  { title: "Students", icon: Users, href: "/crm/student" },
 ];
 
 const documentNav = [
@@ -83,7 +83,10 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
                 <SidebarMenu>
                   {primaryNav.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton isActive={item.active}>
+                      <SidebarMenuButton
+                        isActive={item.active}
+                        render={<Link href={item.href} />}
+                      >
                         <item.icon />
                         <span>{item.title}</span>
                       </SidebarMenuButton>

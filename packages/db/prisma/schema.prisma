@@ -35,3 +35,35 @@ model User {
 
   @@map("user")
 }
+
+model Student {
+  id               String    @id @default(uuid())
+  enrollmentNumber String    @unique @map("enrollment_number")
+  enrollmentDate   DateTime  @map("enrollment_date")
+  firstName        String    @map("first_name")
+  middleName       String?   @map("middle_name")
+  surname          String
+  phone            String
+  email            String?
+  address          String?
+  birthDate        DateTime? @map("birth_date")
+  country          String
+  emergencyName    String?   @map("emergency_name")
+  emergencyPhone   String?   @map("emergency_phone")
+  emergencyEmail   String?   @map("emergency_email")
+  source           String
+  purpose          String?
+  interestedField  String?   @map("interested_field")
+  status           String
+  assignedTo       String    @map("assigned_to")
+  intake           String
+  details          String?
+  followUp         Boolean   @default(false) @map("follow_up")
+  followUpDate     DateTime? @map("follow_up_date")
+  followUpRemark   String?   @map("follow_up_remark")
+  englishTest      String?   @map("english_test")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("student")
+}
