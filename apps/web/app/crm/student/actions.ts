@@ -29,7 +29,7 @@ export async function createStudent(formData: FormData) {
       interestedField: formData.get("interestedField") as string,
 
       status: formData.get("status") as string,
-      assignedTo: formData.get("assignedTo") as string,
+      assignedToUserId: formData.get("assignedToUserId") as string,
       intake: formData.get("intake") as string,
 
       details: formData.get("details") as string,

@@ -8,6 +8,7 @@ import {
   LEAD_STATUS,
   SOURCES,
 } from "@repo/shared";
+import { prisma } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -67,7 +68,9 @@ function SelectField({
   );
 }
 
-export default function NewStudentPage() {
+export default async function NewStudentPage() {
+  const users = await prisma.user.findMany({ where: { isActive: true }, orderBy: { fullName: "asc" } });
+
   return (
     <>
       <div className="flex items-center justify-between gap-3">
@@ -77,7 +80,11 @@ export default function NewStudentPage() {
             Add a student inquiry or enrollment record
           </p>
         </div>
-        <Button variant="outline" render={<Link href="/crm/student" />}>
+        <Button
+          nativeButton={false}
+          variant="outline"
+          render={<Link href="/crm/student" />}
+        >
           Back
         </Button>
       </div>
@@ -96,7 +103,22 @@ export default function NewStudentPage() {
               <Input name="enrollmentDate" type="date" required />
             </Field>
             <Field label="Assigned To">
-              <Input name="assignedTo" required />
+              <select
+                name="assignedToUserId"
+                required
+                className={selectClassName}
+              >
+                <option value="">
+                  {users.length === 0
+                    ? "No active users available"
+                    : "Select assigned user"}
+                </option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.fullName} - {user.role}
+                  </option>
+                ))}
+              </select>
             </Field>
           </CardContent>
         </Card>
@@ -220,7 +242,11 @@ export default function NewStudentPage() {
         </Card>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline" render={<Link href="/crm/student" />}>
+          <Button
+            nativeButton={false}
+            variant="outline"
+            render={<Link href="/crm/student" />}
+          >
             Cancel
           </Button>
           <Button type="submit">Create Student</Button>

@@ -23,15 +23,17 @@ model ActivityType {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  fullName  String   @map("full_name")
-  phone     String   @unique
-  email     String   @unique
-  password  String
-  role      String
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               String    @id @default(uuid())
+  fullName         String    @map("full_name")
+  phone            String    @unique
+  email            String    @unique
+  password         String
+  role             String
+  isActive         Boolean   @default(true) @map("is_active")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  assignedStudents Student[]
 
   @@map("user")
 }
@@ -55,7 +57,10 @@ model Student {
   purpose          String?
   interestedField  String?   @map("interested_field")
   status           String
-  assignedTo       String    @map("assigned_to")
+
+  assignedToUserId String?   @map("assigned_to_user_id")
+  assignedToUser   User?     @relation(fields: [assignedToUserId], references: [id])
+  
   intake           String
   details          String?
   followUp         Boolean   @default(false) @map("follow_up")

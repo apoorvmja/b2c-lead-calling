@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 
 export default async function StudentPage() {
-  const students = await prisma.student.findMany({ orderBy: { createdAt: "desc" } });
+  const students = await prisma.student.findMany({ include: { assignedToUser: true }, orderBy: { createdAt: "desc" } });
 
   return (
     <>
@@ -31,7 +31,13 @@ export default async function StudentPage() {
             Student inquiry and enrollment records
           </p>
         </div>
-        <Button render={<Link href="/crm/student/new" />}>New Student</Button>
+        <Button
+          nativeButton={false}
+          variant={"outline"}
+          render={<Link href="/crm/student/new" />}
+        >
+          New Student
+        </Button>
       </div>
 
       <Card>
@@ -86,7 +92,9 @@ export default async function StudentPage() {
                     <TableCell>{student.source}</TableCell>
                     <TableCell>{student.status}</TableCell>
                     <TableCell>{student.intake}</TableCell>
-                    <TableCell>{student.assignedTo}</TableCell>
+                    <TableCell>
+                      {student.assignedToUser?.fullName ?? "Unassigned"}
+                    </TableCell>
                   </TableRow>
                 ))
               )}
