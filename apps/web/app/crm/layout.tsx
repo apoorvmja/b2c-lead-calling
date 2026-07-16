@@ -5,14 +5,10 @@ import {
   FileText,
   Home,
   Layers3,
-  Plus,
-  Search,
-  Settings2,
   ShieldCheck,
   Users,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +24,8 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+
+import { CrmThemeToggle } from "./_components/crm-theme-toggle";
 
 const primaryNav = [
   { title: "Dashboard", icon: Home, href: "/crm", active: true },
@@ -60,10 +58,10 @@ const masterNav = [
 
 export default function CrmLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="dark min-h-svh bg-background text-foreground">
+    <div data-crm-shell className="dark min-h-svh bg-background text-foreground">
       <SidebarProvider>
         <Sidebar collapsible="icon">
-          <SidebarHeader className="border-b border-sidebar-border p-3">
+          <SidebarHeader className="border-b border-sidebar-border p-2">
             <div className="flex h-9 items-center gap-2 px-1">
               <div className="flex size-7 items-center justify-center rounded-md border border-sidebar-border bg-sidebar-accent">
                 <span className="text-xs font-semibold">GG</span>
@@ -154,17 +152,7 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <h1 className="truncate text-sm font-medium">CRM Dashboard</h1>
             </div>
-            <Button variant="outline" size="sm" className="hidden sm:flex">
-              <Search />
-              Search
-            </Button>
-            <Button size="sm">
-              <Plus />
-              New
-            </Button>
-            <Button variant="ghost" size="icon-sm" aria-label="Settings">
-              <Settings2 />
-            </Button>
+            <CrmThemeToggle />
           </header>
 
           <main className="flex-1 overflow-auto">
