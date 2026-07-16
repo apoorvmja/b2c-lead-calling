@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@repo/db";
+import { LEAD_ACTIVITIES } from "@repo/shared";
 
 function studentData(formData: FormData) {
   return {
@@ -45,6 +46,47 @@ export async function createStudent(formData: FormData) {
     data: studentData(formData),
   });
 
+  redirect("/crm/student");
+}
+
+export async function convertLeadToStudent(leadId: string, formData: FormData) {
+  await prisma.$transaction(async (tx) => {
+    const lead = await tx.lead.findUnique({
+      where: { id: leadId },
+      select: {
+        status: true,
+        isConverted: true,
+      },
+    });
+
+    if (!lead || lead.isConverted) {
+      return;
+    }
+
+    const student = await tx.student.create({
+      data: studentData(formData),
+    });
+
+    await tx.lead.update({
+      where: { id: leadId },
+      data: {
+        isConverted: true,
+        convertedAt: new Date(),
+        convertedStudentId: student.id,
+      },
+    });
+    await tx.leadHistory.create({
+      data: {
+        leadId,
+        status: lead.status,
+        activity: LEAD_ACTIVITIES.CONVERTED_TO_STUDENT,
+        remarks: "Converted to student",
+      },
+    });
+  });
+
+  revalidatePath("/crm/lead");
+  revalidatePath(`/crm/lead/${leadId}/edit`);
   redirect("/crm/student");
 }
 

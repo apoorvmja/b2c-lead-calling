@@ -57,6 +57,28 @@ export default async function EditLeadPage({
         submitLabel="Update Lead"
       />
 
+      <div className="flex justify-end">
+        {lead.isConverted && lead.convertedStudentId ? (
+          <Button
+            nativeButton={false}
+            variant="outline"
+            render={
+              <Link href={`/crm/student/${lead.convertedStudentId}/edit`} />
+            }
+          >
+            View Student
+          </Button>
+        ) : (
+          <Button
+            nativeButton={false}
+            variant="outline"
+            render={<Link href={`/crm/lead/${lead.id}/convert`} />}
+          >
+            Convert to Student
+          </Button>
+        )}
+      </div>
+
       <LeadHistoryCard leadId={lead.id} history={lead.history} />
     </>
   );

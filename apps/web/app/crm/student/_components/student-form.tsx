@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { Student, User } from "@repo/db";
+import type { Lead, Student, User } from "@repo/db";
 import {
   COUNTRIES,
   ENGLISH_TESTS,
@@ -81,13 +81,19 @@ export function StudentForm({
   action,
   users,
   student,
+  lead,
   submitLabel,
 }: {
   action: (formData: FormData) => Promise<void>;
   users: User[];
   student?: Student;
+  lead?: Lead;
   submitLabel: string;
 }) {
+  const leadName = lead?.name.trim().split(/\s+/) ?? [];
+  const leadFirstName = leadName[0] ?? "";
+  const leadSurname = leadName.slice(1).join(" ");
+
   return (
     <form action={action} className="grid gap-6">
       <Card>
@@ -115,7 +121,9 @@ export function StudentForm({
             <select
               name="assignedToUserId"
               required
-              defaultValue={student?.assignedToUserId ?? ""}
+              defaultValue={
+                student?.assignedToUserId ?? lead?.assignedToUserId ?? ""
+              }
               className={selectClassName}
             >
               <option value="">
@@ -140,19 +148,35 @@ export function StudentForm({
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Field label="First Name">
-            <Input name="firstName" defaultValue={student?.firstName ?? ""} required />
+            <Input
+              name="firstName"
+              defaultValue={student?.firstName ?? leadFirstName}
+              required
+            />
           </Field>
           <Field label="Middle Name">
             <Input name="middleName" defaultValue={student?.middleName ?? ""} />
           </Field>
           <Field label="Surname">
-            <Input name="surname" defaultValue={student?.surname ?? ""} required />
+            <Input
+              name="surname"
+              defaultValue={student?.surname ?? leadSurname}
+              required
+            />
           </Field>
           <Field label="Phone">
-            <Input name="phone" defaultValue={student?.phone ?? ""} required />
+            <Input
+              name="phone"
+              defaultValue={student?.phone ?? lead?.phone ?? ""}
+              required
+            />
           </Field>
           <Field label="Email">
-            <Input name="email" type="email" defaultValue={student?.email ?? ""} />
+            <Input
+              name="email"
+              type="email"
+              defaultValue={student?.email ?? lead?.email ?? ""}
+            />
           </Field>
           <Field label="Birth Date">
             <Input
@@ -165,7 +189,7 @@ export function StudentForm({
             <Field label="Address">
               <textarea
                 name="address"
-                defaultValue={student?.address ?? ""}
+                defaultValue={student?.address ?? lead?.address ?? ""}
                 className={textareaClassName}
               />
             </Field>
@@ -183,14 +207,14 @@ export function StudentForm({
             name="country"
             label="Country"
             data={COUNTRIES}
-            defaultValue={student?.country}
+            defaultValue={student?.country ?? lead?.country}
             required
           />
           <SelectField
             name="source"
             label="Source"
             data={SOURCES}
-            defaultValue={student?.source}
+            defaultValue={student?.source ?? lead?.source}
             required
           />
           <SelectField
@@ -211,19 +235,19 @@ export function StudentForm({
             name="interestedField"
             label="Interested Field"
             data={INTERESTED_FIELDS}
-            defaultValue={student?.interestedField}
+            defaultValue={student?.interestedField ?? lead?.interestedField}
           />
           <SelectField
             name="englishTest"
             label="English Test"
             data={ENGLISH_TESTS}
-            defaultValue={student?.englishTest}
+            defaultValue={student?.englishTest ?? lead?.englishTest}
           />
           <div className="md:col-span-2 xl:col-span-3">
             <Field label="Purpose">
               <textarea
                 name="purpose"
-                defaultValue={student?.purpose ?? ""}
+                defaultValue={student?.purpose ?? lead?.purpose ?? ""}
                 className={textareaClassName}
               />
             </Field>
