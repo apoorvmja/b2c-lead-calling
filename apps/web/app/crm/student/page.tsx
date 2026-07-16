@@ -62,7 +62,6 @@ export default async function StudentPage() {
                 <TableHead>Country</TableHead>
                 <TableHead>Source</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Intake</TableHead>
                 <TableHead>Assigned To</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -92,7 +91,6 @@ export default async function StudentPage() {
                     <TableCell>{student.country}</TableCell>
                     <TableCell>{student.source}</TableCell>
                     <TableCell>{student.status}</TableCell>
-                    <TableCell>{student.intake}</TableCell>
                     <TableCell>
                       {student.assignedToUser?.fullName ?? "Unassigned"}
                     </TableCell>

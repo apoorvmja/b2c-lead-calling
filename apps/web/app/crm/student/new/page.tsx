@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 
 import { StudentForm } from "../_components/student-form";
 import { createStudent } from "../actions";
+import { nextEnrollmentNumber } from "../enrollment-number";
 
 export default async function NewStudentPage() {
   const users = await prisma.user.findMany({ where: { isActive: true }, orderBy: { fullName: "asc" } });
+  const enrollmentNumber = await nextEnrollmentNumber();
 
   return (
     <>
@@ -31,6 +33,7 @@ export default async function NewStudentPage() {
       <StudentForm
         action={createStudent}
         users={users}
+        enrollmentNumber={enrollmentNumber}
         submitLabel="Create Student"
       />
     </>

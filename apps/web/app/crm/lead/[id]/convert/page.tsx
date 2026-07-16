@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 
 import { StudentForm } from "../../../student/_components/student-form";
 import { convertLeadToStudent } from "../../../student/actions";
+import { nextEnrollmentNumber } from "../../../student/enrollment-number";
 
 export default async function ConvertLeadPage({
   params,
@@ -26,6 +27,7 @@ export default async function ConvertLeadPage({
       : { isActive: true },
     orderBy: { fullName: "asc" },
   });
+  const enrollmentNumber = await nextEnrollmentNumber();
   const action = convertLeadToStudent.bind(null, lead.id);
 
   return (
@@ -50,6 +52,7 @@ export default async function ConvertLeadPage({
         action={action}
         users={users}
         lead={lead}
+        enrollmentNumber={enrollmentNumber}
         submitLabel="Convert to Student"
       />
     </>

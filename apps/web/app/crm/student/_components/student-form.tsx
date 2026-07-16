@@ -82,12 +82,14 @@ export function StudentForm({
   users,
   student,
   lead,
+  enrollmentNumber,
   submitLabel,
 }: {
   action: (formData: FormData) => Promise<void>;
   users: User[];
   student?: Student;
   lead?: Lead;
+  enrollmentNumber?: string;
   submitLabel: string;
 }) {
   const leadName = lead?.name.trim().split(/\s+/) ?? [];
@@ -105,7 +107,7 @@ export function StudentForm({
           <Field label="Enrollment Number">
             <Input
               name="enrollmentNumber"
-              defaultValue={student?.enrollmentNumber ?? ""}
+              defaultValue={student?.enrollmentNumber ?? enrollmentNumber ?? ""}
               required
             />
           </Field>
