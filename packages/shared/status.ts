@@ -1,9 +1,9 @@
 export const LEAD_STATUS = {
     NEW: "New",
-    COLD: "Cold",
-    WARM: "Warm",
     HOT: "Hot",
-    VERY_INTERESTED: "Very Interested",
+    WARM: "Warm",
+    COLD: "Cold",
+    DEAD: "Dead",
 } as const;
 
 export const STUDENT_STATUS = {
