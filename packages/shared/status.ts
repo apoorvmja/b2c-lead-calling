@@ -43,3 +43,17 @@ export const APPLICATION_STATUS = {
 } as const;
 
 export type ApplicationStatus = (typeof APPLICATION_STATUS)[keyof typeof APPLICATION_STATUS];
+
+export const VISA_STATUS = {
+    NOT_STARTED: "Not Started",
+    DOCUMENTS_PENDING: "Documents Pending",
+    APPOINTMENT_BOOKED: "Appointment Booked",
+    BIOMETRICS_COMPLETED: "Biometrics Completed",
+    UNDER_PROCESS: "Under Process",
+    APPROVED: "Approved",
+    REJECTED: "Rejected",
+    EXPIRED: "Expired",
+    CANCELLED: "Cancelled",
+} as const;
+
+export type VisaStatus = (typeof VISA_STATUS)[keyof typeof VISA_STATUS];

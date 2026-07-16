@@ -1,17 +1,14 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import {
-  BarChart3,
-  BookOpen,
   ClipboardList,
-  Database,
   FileText,
   Home,
   Layers3,
-  MoreHorizontal,
   Plus,
   Search,
   Settings2,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 
@@ -25,7 +22,6 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -35,20 +31,14 @@ import {
 
 const primaryNav = [
   { title: "Dashboard", icon: Home, href: "/crm", active: true },
-  { title: "Analytics", icon: BarChart3, href: "/crm" },
   { title: "Students", icon: Users, href: "/crm/student" },
   { title: "Applications", icon: FileText, href: "/crm/application" },
+  { title: "Visas", icon: ShieldCheck, href: "/crm/visa" },
 ];
 
 const leadNav = [
   { title: "Lead Details", href: "/crm/lead" },
   { title: "Unallocated Leads", href: "/crm/lead/unallocated" },
-];
-
-const documentNav = [
-  { title: "Data Library", icon: Database, active: true },
-  { title: "Reports", icon: FileText },
-  { title: "Knowledge Base", icon: BookOpen },
 ];
 
 const masterNav = [
@@ -112,27 +102,6 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
                         <ClipboardList />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            <SidebarGroup>
-              <SidebarGroupLabel>Documents</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {documentNav.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton isActive={item.active}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                      {item.active ? (
-                        <SidebarMenuAction aria-label="More actions">
-                          <MoreHorizontal />
-                        </SidebarMenuAction>
-                      ) : null}
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>

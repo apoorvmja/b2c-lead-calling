@@ -114,9 +114,11 @@ model Student {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  followUps         StudentFollowUp[]
-  applications      StudentApplication[]
-  convertedFromLead Lead?                @relation("LeadConversion")
+  convertedFromLead Lead? @relation("LeadConversion")
+
+  followUps    StudentFollowUp[]
+  applications StudentApplication[]
+  visas        StudentVisa[]
 
   @@map("student")
 }
@@ -181,4 +183,40 @@ model ApplicationUpdate {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("application_update")
+}
+
+model StudentVisa {
+  id String @id @default(uuid())
+
+  studentId String  @map("student_id")
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  country String?
+
+  visaType   String  @map("visa_type")
+  visaNumber String? @unique @map("visa_number")
+  visaDone   Boolean @default(false) @map("visa_done")
+
+  status String @default("Not Started")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  updates StudentVisaUpdate[]
+
+  @@map("student_visa")
+}
+
+model StudentVisaUpdate {
+  id String @id @default(uuid())
+
+  visaId String      @map("visa_id")
+  visa   StudentVisa @relation(fields: [visaId], references: [id], onDelete: Cascade)
+
+  status  String
+  remarks String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("student_visa_update")
 }
