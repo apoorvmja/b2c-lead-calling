@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { StatusBadge } from "../../_components/status-badge";
+
 function formatDate(date?: Date | null) {
   return date ? date.toLocaleDateString("en-IN") : "-";
 }
@@ -42,7 +44,9 @@ export function StudentFollowUpsTable({
         ) : (
           followUps.map((followUp) => (
             <TableRow key={followUp.id}>
-              <TableCell className="font-medium">{followUp.status}</TableCell>
+              <TableCell>
+                <StatusBadge status={followUp.status} />
+              </TableCell>
               <TableCell>{followUp.followUp ? "Yes" : "No"}</TableCell>
               <TableCell>{formatDate(followUp.followUpDate)}</TableCell>
               <TableCell className="max-w-sm whitespace-normal">

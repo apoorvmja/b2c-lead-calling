@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { StatusBadge } from "../../_components/status-badge";
+
 function formatDate(date?: Date | null) {
   return date ? date.toLocaleDateString("en-IN") : "-";
 }
@@ -40,7 +42,9 @@ export function ApplicationUpdatesTable({
         ) : (
           updates.map((update) => (
             <TableRow key={update.id}>
-              <TableCell className="font-medium">{update.status}</TableCell>
+              <TableCell>
+                <StatusBadge status={update.status} />
+              </TableCell>
               <TableCell className="max-w-sm whitespace-normal">
                 {update.remarks || "-"}
               </TableCell>

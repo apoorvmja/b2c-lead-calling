@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { StatusBadge } from "../../_components/status-badge";
+
 function formatDate(date?: Date | null) {
   return date ? date.toLocaleDateString("en-IN") : "-";
 }
@@ -39,7 +41,9 @@ export function LeadHistoryTable({ history }: { history: LeadHistory[] }) {
         ) : (
           history.map((entry) => (
             <TableRow key={entry.id}>
-              <TableCell className="font-medium">{entry.status}</TableCell>
+              <TableCell>
+                <StatusBadge status={entry.status} />
+              </TableCell>
               <TableCell>{entry.activity}</TableCell>
               <TableCell>{entry.followUp ? "Yes" : "No"}</TableCell>
               <TableCell>{formatDate(entry.followUpDate)}</TableCell>

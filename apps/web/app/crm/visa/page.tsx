@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table";
 
 import { createVisaUpdate } from "./actions";
+import { StatusBadge } from "../_components/status-badge";
 import { VisaUpdateForm } from "./_components/visa-update-form";
 import { VisaUpdatesTable } from "./_components/visa-updates-table";
 
@@ -121,9 +122,9 @@ export default async function VisaPage() {
                     <TableCell>
                       <Dialog>
                         <DialogTrigger
-                          render={<Button variant="outline" size="sm" />}
+                          render={<Button variant="ghost" size="sm" className="p-0" />}
                         >
-                          {visa.status}
+                          <StatusBadge status={visa.status} />
                         </DialogTrigger>
                         <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                           <DialogHeader>
@@ -131,7 +132,7 @@ export default async function VisaPage() {
                               {visa.visaNumber ?? "Visa"}
                             </DialogTitle>
                             <DialogDescription>
-                              Current status: {visa.status}
+                              Current status: <StatusBadge status={visa.status} />
                             </DialogDescription>
                           </DialogHeader>
                           <div className="grid gap-6">

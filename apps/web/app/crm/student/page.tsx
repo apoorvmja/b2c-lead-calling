@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table";
 
 import { createStudentFollowUp } from "./actions";
+import { StatusBadge } from "../_components/status-badge";
 import { StudentFollowUpForm } from "./_components/student-follow-up-form";
 import { StudentFollowUpsTable } from "./_components/student-follow-ups-table";
 
@@ -110,9 +111,9 @@ export default async function StudentPage() {
                     <TableCell>
                       <Dialog>
                         <DialogTrigger
-                          render={<Button variant="outline" size="sm" />}
+                          render={<Button variant="ghost" size="sm" className="p-0" />}
                         >
-                          {student.status}
+                          <StatusBadge status={student.status} />
                         </DialogTrigger>
                         <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                           <DialogHeader>
@@ -126,7 +127,7 @@ export default async function StudentPage() {
                                 .join(" ")}
                             </DialogTitle>
                             <DialogDescription>
-                              Current status: {student.status}
+                              Current status: <StatusBadge status={student.status} />
                             </DialogDescription>
                           </DialogHeader>
                           <div className="grid gap-6">

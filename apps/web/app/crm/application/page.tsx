@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/table";
 
 import { createApplicationUpdate } from "./actions";
+import { StatusBadge } from "../_components/status-badge";
 import { ApplicationUpdateForm } from "./_components/application-update-form";
 import { ApplicationUpdatesTable } from "./_components/application-updates-table";
 
@@ -127,9 +128,9 @@ export default async function ApplicationPage() {
                     <TableCell>
                       <Dialog>
                         <DialogTrigger
-                          render={<Button variant="outline" size="sm" />}
+                          render={<Button variant="ghost" size="sm" className="p-0" />}
                         >
-                          {application.applicationStatus}
+                          <StatusBadge status={application.applicationStatus} />
                         </DialogTrigger>
                         <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                           <DialogHeader>
@@ -137,7 +138,8 @@ export default async function ApplicationPage() {
                               {application.applicationNo ?? "Application"}
                             </DialogTitle>
                             <DialogDescription>
-                              Current status: {application.applicationStatus}
+                              Current status:{" "}
+                              <StatusBadge status={application.applicationStatus} />
                             </DialogDescription>
                           </DialogHeader>
                           <div className="grid gap-6">

@@ -20,6 +20,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { StatusBadge } from "./_components/status-badge";
+
 type LeadWithHistory = Lead & {
   assignedToUser: User | null;
   history: LeadHistory[];
@@ -209,7 +211,9 @@ export default async function CrmPage() {
                       <TableRow key={lead.id}>
                         <TableCell className="font-medium">{lead.name}</TableCell>
                         <TableCell>{lead.phone}</TableCell>
-                        <TableCell>{latest?.status ?? lead.status}</TableCell>
+                        <TableCell>
+                          <StatusBadge status={latest?.status ?? lead.status} />
+                        </TableCell>
                         <TableCell>{formatDate(latest?.followUpDate)}</TableCell>
                       </TableRow>
                     );
@@ -265,7 +269,9 @@ export default async function CrmPage() {
                           {studentName(student)}
                         </TableCell>
                         <TableCell>{student.lead.phone}</TableCell>
-                        <TableCell>{latest?.status ?? student.status}</TableCell>
+                        <TableCell>
+                          <StatusBadge status={latest?.status ?? student.status} />
+                        </TableCell>
                         <TableCell>{formatDate(latest?.followUpDate)}</TableCell>
                       </TableRow>
                     );
@@ -318,7 +324,9 @@ export default async function CrmPage() {
                   <TableRow key={`${entry.type}-${entry.id}`}>
                     <TableCell>{entry.type}</TableCell>
                     <TableCell className="font-medium">{entry.name}</TableCell>
-                    <TableCell>{entry.status}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={entry.status} />
+                    </TableCell>
                     <TableCell className="max-w-sm whitespace-normal">
                       {entry.remarks || "-"}
                     </TableCell>

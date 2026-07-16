@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table";
 
 import { createLeadHistory } from "../actions";
+import { StatusBadge } from "../../_components/status-badge";
 import { LeadHistoryForm } from "../_components/lead-history-form";
 import { LeadHistoryTable } from "../_components/lead-history-table";
 
@@ -136,15 +137,15 @@ export default async function LeadFollowUpPage() {
                       <TableCell>
                         <Dialog>
                           <DialogTrigger
-                            render={<Button variant="outline" size="sm" />}
+                            render={<Button variant="ghost" size="sm" className="p-0" />}
                           >
-                            {latest.status}
+                            <StatusBadge status={latest.status} />
                           </DialogTrigger>
                           <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                             <DialogHeader>
                               <DialogTitle>{lead.name}</DialogTitle>
                               <DialogDescription>
-                                Current status: {lead.status}
+                                Current status: <StatusBadge status={lead.status} />
                               </DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-6">
