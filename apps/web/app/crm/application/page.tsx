@@ -131,7 +131,7 @@ export default async function ApplicationPage() {
                         >
                           {application.applicationStatus}
                         </DialogTrigger>
-                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                        <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                           <DialogHeader>
                             <DialogTitle>
                               {application.applicationNo ?? "Application"}

@@ -121,7 +121,7 @@ export function LeadRecordsPage({
                         >
                           {lead.status}
                         </DialogTrigger>
-                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                        <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
                           <DialogHeader>
                             <DialogTitle>{lead.name}</DialogTitle>
                             <DialogDescription>

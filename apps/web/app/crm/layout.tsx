@@ -1,13 +1,4 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
-import {
-  ClipboardList,
-  FileText,
-  Home,
-  Layers3,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
 
 import {
   Sidebar,
@@ -18,19 +9,18 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
+import { CrmNavLink } from "./_components/crm-nav-link";
 import { CrmThemeToggle } from "./_components/crm-theme-toggle";
 
 const primaryNav = [
-  { title: "Dashboard", icon: Home, href: "/crm", active: true },
-  { title: "Applications", icon: FileText, href: "/crm/application" },
-  { title: "Visas", icon: ShieldCheck, href: "/crm/visa" },
+  { title: "Dashboard", icon: "dashboard" as const, href: "/crm" },
+  { title: "Applications", icon: "applications" as const, href: "/crm/application" },
+  { title: "Visas", icon: "visas" as const, href: "/crm/visa" },
 ];
 
 const leadNav = [
@@ -58,7 +48,10 @@ const masterNav = [
 
 export default function CrmLayout({ children }: { children: ReactNode }) {
   return (
-    <div data-crm-shell className="dark min-h-svh bg-background text-foreground">
+    <div
+      data-crm-shell
+      className="min-h-svh bg-background text-foreground"
+    >
       <SidebarProvider>
         <Sidebar collapsible="icon">
           <SidebarHeader className="border-b border-sidebar-border p-2">
@@ -81,15 +74,7 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {primaryNav.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        isActive={item.active}
-                        render={<Link href={item.href} />}
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <CrmNavLink key={item.href} {...item} />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -100,12 +85,7 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {studentNav.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton render={<Link href={item.href} />}>
-                        <Users />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <CrmNavLink key={item.href} {...item} icon="students" />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -116,12 +96,7 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {leadNav.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton render={<Link href={item.href} />}>
-                        <ClipboardList />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <CrmNavLink key={item.href} {...item} icon="leads" />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -132,12 +107,7 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {masterNav.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton render={<Link href={item.href} />}>
-                        <Layers3 />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <CrmNavLink key={item.href} {...item} icon="master" />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
