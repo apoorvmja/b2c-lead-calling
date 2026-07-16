@@ -59,4 +59,5 @@ export async function createLeadHistory(leadId: string, formData: FormData) {
 
   revalidatePath(`/crm/lead/${leadId}/edit`);
   revalidatePath("/crm/lead");
+  revalidatePath("/crm/lead/follow-up");
 }

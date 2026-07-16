@@ -107,4 +107,5 @@ export async function createStudentFollowUp(
 
   revalidatePath(`/crm/student/${studentId}/edit`);
   revalidatePath("/crm/student");
+  revalidatePath("/crm/student/follow-up");
 }
