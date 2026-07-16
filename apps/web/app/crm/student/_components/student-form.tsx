@@ -1,14 +1,7 @@
 import Link from "next/link";
 
 import type { Lead, Student, User } from "@repo/db";
-import {
-  COUNTRIES,
-  ENGLISH_TESTS,
-  INTAKES,
-  INTERESTED_FIELDS,
-  SOURCES,
-  STUDENT_STATUS,
-} from "@repo/shared";
+import { INTAKES, STUDENT_STATUS } from "@repo/shared";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -79,16 +72,14 @@ function SelectField({
 
 export function StudentForm({
   action,
-  users,
   student,
   lead,
   enrollmentNumber,
   submitLabel,
 }: {
   action: (formData: FormData) => Promise<void>;
-  users: User[];
   student?: Student;
-  lead?: Lead;
+  lead?: Lead & { assignedToUser?: User | null };
   enrollmentNumber?: string;
   submitLabel: string;
 }) {
@@ -119,34 +110,13 @@ export function StudentForm({
               required
             />
           </Field>
-          <Field label="Assigned To">
-            <select
-              name="assignedToUserId"
-              required
-              defaultValue={
-                student?.assignedToUserId ?? lead?.assignedToUserId ?? ""
-              }
-              className={selectClassName}
-            >
-              <option value="">
-                {users.length === 0
-                  ? "No active users available"
-                  : "Select assigned user"}
-              </option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.fullName} - {user.role}
-                </option>
-              ))}
-            </select>
-          </Field>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
           <CardTitle>Personal Details</CardTitle>
-          <CardDescription>Student identity and contact information</CardDescription>
+          <CardDescription>Student identity details</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Field label="First Name">
@@ -166,20 +136,6 @@ export function StudentForm({
               required
             />
           </Field>
-          <Field label="Phone">
-            <Input
-              name="phone"
-              defaultValue={student?.phone ?? lead?.phone ?? ""}
-              required
-            />
-          </Field>
-          <Field label="Email">
-            <Input
-              name="email"
-              type="email"
-              defaultValue={student?.email ?? lead?.email ?? ""}
-            />
-          </Field>
           <Field label="Birth Date">
             <Input
               name="birthDate"
@@ -187,38 +143,77 @@ export function StudentForm({
               defaultValue={formatDate(student?.birthDate)}
             />
           </Field>
-          <div className="md:col-span-2 xl:col-span-3">
-            <Field label="Address">
-              <textarea
-                name="address"
-                defaultValue={student?.address ?? lead?.address ?? ""}
-                className={textareaClassName}
-              />
-            </Field>
-          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Inquiry Details</CardTitle>
-          <CardDescription>CRM classification and study preferences</CardDescription>
+          <CardTitle>Lead Details</CardTitle>
+          <CardDescription>
+            Contact and inquiry details from the linked lead
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 text-sm md:grid-cols-2 xl:grid-cols-3">
+          <div>
+            <p className="font-medium">Phone</p>
+            <p className="text-muted-foreground">{lead?.phone ?? "-"}</p>
+          </div>
+          <div>
+            <p className="font-medium">Email</p>
+            <p className="text-muted-foreground">{lead?.email ?? "-"}</p>
+          </div>
+          <div>
+            <p className="font-medium">Assigned To</p>
+            <p className="text-muted-foreground">
+              {lead?.assignedToUser?.fullName ?? "Unassigned"}
+            </p>
+          </div>
+          <div>
+            <p className="font-medium">Country</p>
+            <p className="text-muted-foreground">{lead?.country ?? "-"}</p>
+          </div>
+          <div>
+            <p className="font-medium">Source</p>
+            <p className="text-muted-foreground">{lead?.source ?? "-"}</p>
+          </div>
+          <div>
+            <p className="font-medium">English Test</p>
+            <p className="text-muted-foreground">{lead?.englishTest ?? "-"}</p>
+          </div>
+          <div>
+            <p className="font-medium">Interested Field</p>
+            <p className="text-muted-foreground">
+              {lead?.interestedField ?? "-"}
+            </p>
+          </div>
+          <div className="md:col-span-2">
+            <p className="font-medium">Purpose</p>
+            <p className="text-muted-foreground">{lead?.purpose ?? "-"}</p>
+          </div>
+          <div className="md:col-span-2 xl:col-span-3">
+            <p className="font-medium">Address</p>
+            <p className="text-muted-foreground">{lead?.address ?? "-"}</p>
+          </div>
+          {lead ? (
+            <div className="md:col-span-2 xl:col-span-3">
+              <Button
+                nativeButton={false}
+                variant="outline"
+                render={<Link href={`/crm/lead/${lead.id}/edit`} />}
+              >
+                Edit Lead Details
+              </Button>
+            </div>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Student Details</CardTitle>
+          <CardDescription>Enrollment status and study intake</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <SelectField
-            name="country"
-            label="Country"
-            data={COUNTRIES}
-            defaultValue={student?.country ?? lead?.country}
-            required
-          />
-          <SelectField
-            name="source"
-            label="Source"
-            data={SOURCES}
-            defaultValue={student?.source ?? lead?.source}
-            required
-          />
           <SelectField
             name="status"
             label="Status"
@@ -233,27 +228,6 @@ export function StudentForm({
             defaultValue={student?.intake}
             required
           />
-          <SelectField
-            name="interestedField"
-            label="Interested Field"
-            data={INTERESTED_FIELDS}
-            defaultValue={student?.interestedField ?? lead?.interestedField}
-          />
-          <SelectField
-            name="englishTest"
-            label="English Test"
-            data={ENGLISH_TESTS}
-            defaultValue={student?.englishTest ?? lead?.englishTest}
-          />
-          <div className="md:col-span-2 xl:col-span-3">
-            <Field label="Purpose">
-              <textarea
-                name="purpose"
-                defaultValue={student?.purpose ?? lead?.purpose ?? ""}
-                className={textareaClassName}
-              />
-            </Field>
-          </div>
           <div className="md:col-span-2 xl:col-span-3">
             <Field label="Details">
               <textarea

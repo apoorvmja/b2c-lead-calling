@@ -17,7 +17,10 @@ export default async function EditLeadPage({
   const { id } = await params;
   const lead = await prisma.lead.findUnique({
     where: { id },
-    include: { history: { orderBy: { createdAt: "desc" } } },
+    include: {
+      convertedStudent: true,
+      history: { orderBy: { createdAt: "desc" } },
+    },
   });
 
   if (!lead) {
@@ -58,12 +61,12 @@ export default async function EditLeadPage({
       />
 
       <div className="flex justify-end">
-        {lead.isConverted && lead.convertedStudentId ? (
+        {lead.isConverted && lead.convertedStudent ? (
           <Button
             nativeButton={false}
             variant="outline"
             render={
-              <Link href={`/crm/student/${lead.convertedStudentId}/edit`} />
+              <Link href={`/crm/student/${lead.convertedStudent.id}/edit`} />
             }
           >
             View Student

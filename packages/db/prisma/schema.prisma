@@ -18,8 +18,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  assignedStudents Student[]
-  assignedLeads    Lead[]
+  assignedLeads Lead[]
 
   @@map("user")
 }
@@ -41,10 +40,9 @@ model Lead {
   status          String
   englishTest     String? @map("english_test")
 
-  isConverted        Boolean   @default(false) @map("is_converted")
-  convertedAt        DateTime? @map("converted_at")
-  convertedStudentId String?   @unique @map("converted_student_id")
-  convertedStudent   Student?  @relation("LeadConversion", fields: [convertedStudentId], references: [id])
+  isConverted      Boolean   @default(false) @map("is_converted")
+  convertedAt      DateTime? @map("converted_at")
+  convertedStudent Student?  @relation("LeadConversion")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -72,34 +70,25 @@ model LeadHistory {
 
 model Student {
   id               String    @id @default(uuid())
+
+  leadId           String    @unique @map("lead_id")
+  lead             Lead      @relation("LeadConversion", fields: [leadId], references: [id])
+  
   enrollmentNumber String    @unique @map("enrollment_number")
   enrollmentDate   DateTime  @map("enrollment_date")
   firstName        String    @map("first_name")
   middleName       String?   @map("middle_name")
   surname          String
-  phone            String
-  email            String?
-  address          String?
   birthDate        DateTime? @map("birth_date")
-  country          String
   emergencyName    String?   @map("emergency_name")
   emergencyPhone   String?   @map("emergency_phone")
   emergencyEmail   String?   @map("emergency_email")
-  source           String
-  purpose          String?
-  interestedField  String?   @map("interested_field")
   status           String
 
-  assignedToUserId String? @map("assigned_to_user_id")
-  assignedToUser   User?   @relation(fields: [assignedToUserId], references: [id])
-
-  intake      String
-  details     String?
-  englishTest String?  @map("english_test")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  convertedFromLead Lead? @relation("LeadConversion")
+  intake    String
+  details   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   followUps    StudentFollowUp[]
   applications StudentApplication[]

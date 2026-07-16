@@ -17,19 +17,16 @@ export default async function EditStudentPage({
   const { id } = await params;
   const student = await prisma.student.findUnique({
     where: { id },
-    include: { followUps: { orderBy: { createdAt: "desc" } } },
+    include: {
+      lead: { include: { assignedToUser: true } },
+      followUps: { orderBy: { createdAt: "desc" } },
+    },
   });
 
   if (!student) {
     notFound();
   }
 
-  const users = await prisma.user.findMany({
-    where: {
-      OR: [{ isActive: true }, { id: student.assignedToUserId ?? "" }],
-    },
-    orderBy: { fullName: "asc" },
-  });
   const action = updateStudent.bind(null, student.id);
 
   return (
@@ -52,8 +49,8 @@ export default async function EditStudentPage({
 
       <StudentForm
         action={action}
-        users={users}
         student={student}
+        lead={student.lead}
         submitLabel="Update Student"
       />
 

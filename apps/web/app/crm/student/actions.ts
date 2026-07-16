@@ -14,39 +14,19 @@ function studentData(formData: FormData) {
     middleName: formData.get("middleName") as string,
     surname: formData.get("surname") as string,
 
-    phone: formData.get("phone") as string,
-    email: formData.get("email") as string,
-    address: formData.get("address") as string,
     birthDate: formData.get("birthDate")
       ? new Date(formData.get("birthDate") as string)
       : null,
-
-    country: formData.get("country") as string,
 
     emergencyName: formData.get("emergencyName") as string,
     emergencyPhone: formData.get("emergencyPhone") as string,
     emergencyEmail: formData.get("emergencyEmail") as string,
 
-    source: formData.get("source") as string,
-    purpose: formData.get("purpose") as string,
-    interestedField: formData.get("interestedField") as string,
-
     status: formData.get("status") as string,
-    assignedToUserId: formData.get("assignedToUserId") as string,
     intake: formData.get("intake") as string,
 
     details: formData.get("details") as string,
-
-    englishTest: formData.get("englishTest") as string,
   };
-}
-
-export async function createStudent(formData: FormData) {
-  await prisma.student.create({
-    data: studentData(formData),
-  });
-
-  redirect("/crm/student");
 }
 
 export async function convertLeadToStudent(leadId: string, formData: FormData) {
@@ -63,8 +43,11 @@ export async function convertLeadToStudent(leadId: string, formData: FormData) {
       return;
     }
 
-    const student = await tx.student.create({
-      data: studentData(formData),
+    await tx.student.create({
+      data: {
+        ...studentData(formData),
+        leadId,
+      },
     });
 
     await tx.lead.update({
@@ -72,7 +55,6 @@ export async function convertLeadToStudent(leadId: string, formData: FormData) {
       data: {
         isConverted: true,
         convertedAt: new Date(),
-        convertedStudentId: student.id,
       },
     });
     await tx.leadHistory.create({
@@ -101,7 +83,7 @@ export async function updateStudent(id: string, formData: FormData) {
 
 export async function createStudentFollowUp(
   studentId: string,
-  formData: FormData
+  formData: FormData,
 ) {
   const status = formData.get("status") as string;
 

@@ -15,18 +15,15 @@ export default async function ConvertLeadPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const lead = await prisma.lead.findUnique({ where: { id } });
+  const lead = await prisma.lead.findUnique({
+    where: { id },
+    include: { assignedToUser: true },
+  });
 
   if (!lead) {
     notFound();
   }
 
-  const users = await prisma.user.findMany({
-    where: lead.assignedToUserId
-      ? { OR: [{ isActive: true }, { id: lead.assignedToUserId }] }
-      : { isActive: true },
-    orderBy: { fullName: "asc" },
-  });
   const enrollmentNumber = await nextEnrollmentNumber();
   const action = convertLeadToStudent.bind(null, lead.id);
 
@@ -50,7 +47,6 @@ export default async function ConvertLeadPage({
 
       <StudentForm
         action={action}
-        users={users}
         lead={lead}
         enrollmentNumber={enrollmentNumber}
         submitLabel="Convert to Student"

@@ -21,7 +21,7 @@ import {
 
 export default async function VisaPage() {
   const visas = await prisma.studentVisa.findMany({
-    include: { student: true },
+    include: { student: { include: { lead: true } } },
     orderBy: { createdAt: "desc" },
   });
 
@@ -94,7 +94,7 @@ export default async function VisaPage() {
                         .filter(Boolean)
                         .join(" ")}
                     </TableCell>
-                    <TableCell>{visa.student.phone}</TableCell>
+                    <TableCell>{visa.student.lead.phone}</TableCell>
                     <TableCell>{visa.country ?? "-"}</TableCell>
                     <TableCell>{visa.visaType}</TableCell>
                     <TableCell>{visa.status}</TableCell>

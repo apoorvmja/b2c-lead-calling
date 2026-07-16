@@ -20,7 +20,10 @@ import {
 } from "@/components/ui/table";
 
 export default async function StudentPage() {
-  const students = await prisma.student.findMany({ include: { assignedToUser: true }, orderBy: { createdAt: "desc" } });
+  const students = await prisma.student.findMany({
+    include: { lead: { include: { assignedToUser: true } } },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <>
@@ -28,16 +31,9 @@ export default async function StudentPage() {
         <div>
           <h2 className="text-lg font-semibold">Students</h2>
           <p className="text-sm text-muted-foreground">
-            Student inquiry and enrollment records
+            Converted student enrollment records
           </p>
         </div>
-        <Button
-          nativeButton={false}
-          variant={"outline"}
-          render={<Link href="/crm/student/new" />}
-        >
-          New Student
-        </Button>
       </div>
 
       <Card>
@@ -50,7 +46,7 @@ export default async function StudentPage() {
       <Card>
         <CardHeader>
           <CardTitle>Student Records</CardTitle>
-          <CardDescription>Recently created students and inquiries</CardDescription>
+          <CardDescription>Recently converted students</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -73,7 +69,7 @@ export default async function StudentPage() {
                     colSpan={9}
                     className="h-24 text-center text-muted-foreground"
                   >
-                    No students added yet.
+                    No converted students yet.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -87,19 +83,21 @@ export default async function StudentPage() {
                         .filter(Boolean)
                         .join(" ")}
                     </TableCell>
-                    <TableCell>{student.phone}</TableCell>
-                    <TableCell>{student.country}</TableCell>
-                    <TableCell>{student.source}</TableCell>
+                    <TableCell>{student.lead.phone}</TableCell>
+                    <TableCell>{student.lead.country}</TableCell>
+                    <TableCell>{student.lead.source}</TableCell>
                     <TableCell>{student.status}</TableCell>
                     <TableCell>
-                      {student.assignedToUser?.fullName ?? "Unassigned"}
+                      {student.lead.assignedToUser?.fullName ?? "Unassigned"}
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
                         nativeButton={false}
                         variant="outline"
                         size="sm"
-                        render={<Link href={`/crm/student/${student.id}/edit`} />}
+                        render={
+                          <Link href={`/crm/student/${student.id}/edit`} />
+                        }
                       >
                         Edit
                       </Button>
