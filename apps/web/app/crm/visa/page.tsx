@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { prisma } from "@repo/db";
+import type { Lead, Student, StudentVisa, StudentVisaUpdate } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -19,11 +28,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { createVisaUpdate } from "./actions";
+import { VisaUpdateForm } from "./_components/visa-update-form";
+import { VisaUpdatesTable } from "./_components/visa-updates-table";
+
+type VisaWithDetails = StudentVisa & {
+  student: Student & { lead: Lead };
+  updates: StudentVisaUpdate[];
+};
+
 export default async function VisaPage() {
-  const visas = await prisma.studentVisa.findMany({
-    include: { student: { include: { lead: true } } },
+  const visas = (await prisma.studentVisa.findMany({
+    include: {
+      student: { include: { lead: true } },
+      updates: { orderBy: { createdAt: "desc" } },
+    },
     orderBy: { createdAt: "desc" },
-  });
+  } as never)) as VisaWithDetails[];
 
   return (
     <>
@@ -97,7 +118,31 @@ export default async function VisaPage() {
                     <TableCell>{visa.student.lead.phone}</TableCell>
                     <TableCell>{visa.country ?? "-"}</TableCell>
                     <TableCell>{visa.visaType}</TableCell>
-                    <TableCell>{visa.status}</TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger
+                          render={<Button variant="outline" size="sm" />}
+                        >
+                          {visa.status}
+                        </DialogTrigger>
+                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                          <DialogHeader>
+                            <DialogTitle>
+                              {visa.visaNumber ?? "Visa"}
+                            </DialogTitle>
+                            <DialogDescription>
+                              Current status: {visa.status}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-6">
+                            <VisaUpdateForm
+                              action={createVisaUpdate.bind(null, visa.id)}
+                            />
+                            <VisaUpdatesTable updates={visa.updates} />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
                     <TableCell>{visa.visaDone ? "Done" : "Pending"}</TableCell>
                     <TableCell className="text-right">
                       <Button

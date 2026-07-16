@@ -4,7 +4,10 @@ import { LeadRecordsPage } from "./_components/lead-records-page";
 
 export default async function LeadPage() {
   const leads = await prisma.lead.findMany({
-    include: { assignedToUser: true },
+    include: {
+      assignedToUser: true,
+      history: { orderBy: { createdAt: "desc" } },
+    },
     orderBy: { createdAt: "desc" },
   });
 

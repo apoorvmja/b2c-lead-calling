@@ -1,6 +1,11 @@
 import Link from "next/link";
 
 import { prisma } from "@repo/db";
+import type {
+  ApplicationUpdate,
+  Student,
+  StudentApplication,
+} from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +16,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -19,11 +32,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { createApplicationUpdate } from "./actions";
+import { ApplicationUpdateForm } from "./_components/application-update-form";
+import { ApplicationUpdatesTable } from "./_components/application-updates-table";
+
+type ApplicationWithDetails = StudentApplication & {
+  student: Student;
+  updates: ApplicationUpdate[];
+};
+
 export default async function ApplicationPage() {
-  const applications = await prisma.studentApplication.findMany({
-    include: { student: true },
+  const applications = (await prisma.studentApplication.findMany({
+    include: {
+      student: true,
+      updates: { orderBy: { createdAt: "desc" } },
+    },
     orderBy: { createdAt: "desc" },
-  });
+  } as never)) as ApplicationWithDetails[];
 
   return (
     <>
@@ -99,7 +124,36 @@ export default async function ApplicationPage() {
                     <TableCell>{application.preferredCountry ?? "-"}</TableCell>
                     <TableCell>{application.college ?? "-"}</TableCell>
                     <TableCell>{application.course ?? "-"}</TableCell>
-                    <TableCell>{application.applicationStatus}</TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger
+                          render={<Button variant="outline" size="sm" />}
+                        >
+                          {application.applicationStatus}
+                        </DialogTrigger>
+                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                          <DialogHeader>
+                            <DialogTitle>
+                              {application.applicationNo ?? "Application"}
+                            </DialogTitle>
+                            <DialogDescription>
+                              Current status: {application.applicationStatus}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-6">
+                            <ApplicationUpdateForm
+                              action={createApplicationUpdate.bind(
+                                null,
+                                application.id,
+                              )}
+                            />
+                            <ApplicationUpdatesTable
+                              updates={application.updates}
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
                     <TableCell>
                       {application.admissionDone ? "Done" : "Pending"}
                     </TableCell>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { Lead, User } from "@repo/db";
+import type { Lead, LeadHistory, User } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -19,7 +27,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type LeadWithAssignedUser = Lead & { assignedToUser: User | null };
+import { createLeadHistory } from "../actions";
+import { LeadHistoryForm } from "./lead-history-form";
+import { LeadHistoryTable } from "./lead-history-table";
+
+type LeadWithAssignedUser = Lead & {
+  assignedToUser: User | null;
+  history: LeadHistory[];
+};
 
 export function LeadRecordsPage({
   title,
@@ -97,7 +112,31 @@ export function LeadRecordsPage({
                     <TableCell>{lead.phone}</TableCell>
                     <TableCell>{lead.country}</TableCell>
                     <TableCell>{lead.source}</TableCell>
-                    <TableCell>{lead.status}</TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger
+                          render={
+                            <Button variant="outline" size="sm" />
+                          }
+                        >
+                          {lead.status}
+                        </DialogTrigger>
+                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                          <DialogHeader>
+                            <DialogTitle>{lead.name}</DialogTitle>
+                            <DialogDescription>
+                              Current status: {lead.status}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-6">
+                            <LeadHistoryForm
+                              action={createLeadHistory.bind(null, lead.id)}
+                            />
+                            <LeadHistoryTable history={lead.history} />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
                     <TableCell>{lead.interestedField || "-"}</TableCell>
                     <TableCell>
                       {lead.assignedToUser?.fullName ?? "Unassigned"}

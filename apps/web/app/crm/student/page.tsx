@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { prisma } from "@repo/db";
+import type { Lead, Student, StudentFollowUp, User } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -19,11 +28,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { createStudentFollowUp } from "./actions";
+import { StudentFollowUpForm } from "./_components/student-follow-up-form";
+import { StudentFollowUpsTable } from "./_components/student-follow-ups-table";
+
+type StudentWithDetails = Student & {
+  lead: Lead & { assignedToUser: User | null };
+  followUps: StudentFollowUp[];
+};
+
 export default async function StudentPage() {
-  const students = await prisma.student.findMany({
-    include: { lead: { include: { assignedToUser: true } } },
+  const students = (await prisma.student.findMany({
+    include: {
+      lead: { include: { assignedToUser: true } },
+      followUps: { orderBy: { createdAt: "desc" } },
+    },
     orderBy: { createdAt: "desc" },
-  });
+  } as never)) as StudentWithDetails[];
 
   return (
     <>
@@ -86,7 +107,42 @@ export default async function StudentPage() {
                     <TableCell>{student.lead.phone}</TableCell>
                     <TableCell>{student.lead.country}</TableCell>
                     <TableCell>{student.lead.source}</TableCell>
-                    <TableCell>{student.status}</TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger
+                          render={<Button variant="outline" size="sm" />}
+                        >
+                          {student.status}
+                        </DialogTrigger>
+                        <DialogContent className="dark max-h-[calc(100vh-2rem)] overflow-auto sm:max-w-4xl">
+                          <DialogHeader>
+                            <DialogTitle>
+                              {[
+                                student.firstName,
+                                student.middleName,
+                                student.surname,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
+                            </DialogTitle>
+                            <DialogDescription>
+                              Current status: {student.status}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-6">
+                            <StudentFollowUpForm
+                              action={createStudentFollowUp.bind(
+                                null,
+                                student.id,
+                              )}
+                            />
+                            <StudentFollowUpsTable
+                              followUps={student.followUps}
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
                     <TableCell>
                       {student.lead.assignedToUser?.fullName ?? "Unassigned"}
                     </TableCell>
