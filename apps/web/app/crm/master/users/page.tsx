@@ -52,12 +52,12 @@ export default async function UsersPage() {
         </CardHeader>
         <CardContent>
           <form action={createUser} className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            <Input name="fullName" placeholder="Full name" required />
-            <Input name="phone" placeholder="Phone" required />
-            <Input name="email" type="email" placeholder="Email" required />
-            <Input name="password" type="password" placeholder="Password" required />
+            <Input name="fullName" placeholder="Full name *" required />
+            <Input name="phone" placeholder="Phone *" required />
+            <Input name="email" type="email" placeholder="Email *" required />
+            <Input name="password" type="password" placeholder="Password *" required />
             <select name="role" required className={selectClassName}>
-              <option value="">Select role</option>
+              <option value="">Select role *</option>
               {Object.values(USER_ROLES).map((role) => (
                 <option key={role} value={role}>
                   {role}

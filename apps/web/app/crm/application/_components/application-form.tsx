@@ -28,13 +28,18 @@ const textareaClassName =
 function Field({
   label,
   children,
+  required = false,
 }: {
   label: string;
   children: React.ReactNode;
+  required?: boolean;
 }) {
   return (
     <label className="grid gap-2 text-sm">
-      <span className="font-medium">{label}</span>
+      <span className="font-medium">
+        {label}
+        {required ? <span className="text-destructive"> *</span> : null}
+      </span>
       {children}
     </label>
   );
@@ -45,16 +50,19 @@ function SelectField({
   label,
   data,
   defaultValue,
+  required = false,
 }: {
   name: string;
   label: string;
   data: Record<string, string>;
   defaultValue?: string | null;
+  required?: boolean;
 }) {
   return (
-    <Field label={label}>
+    <Field label={label} required={required}>
       <select
         name={name}
+        required={required}
         defaultValue={defaultValue ?? ""}
         className={selectClassName}
       >
@@ -88,7 +96,7 @@ export function ApplicationForm({
           <CardDescription>Select the student for this application</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Field label="Student">
+          <Field label="Student" required>
             <select
               name="studentId"
               required

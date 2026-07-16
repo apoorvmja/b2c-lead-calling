@@ -28,13 +28,18 @@ const textareaClassName =
 function Field({
   label,
   children,
+  required = false,
 }: {
   label: string;
   children: React.ReactNode;
+  required?: boolean;
 }) {
   return (
     <label className="grid gap-2 text-sm">
-      <span className="font-medium">{label}</span>
+      <span className="font-medium">
+        {label}
+        {required ? <span className="text-destructive"> *</span> : null}
+      </span>
       {children}
     </label>
   );
@@ -54,7 +59,7 @@ function SelectField({
   required?: boolean;
 }) {
   return (
-    <Field label={label}>
+    <Field label={label} required={required}>
       <select
         name={name}
         required={required}
@@ -91,10 +96,10 @@ export function LeadForm({
           <CardDescription>Lead identity and contact information</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Field label="Name">
+          <Field label="Name" required>
             <Input name="name" defaultValue={lead?.name ?? ""} required />
           </Field>
-          <Field label="Phone">
+          <Field label="Phone" required>
             <Input name="phone" defaultValue={lead?.phone ?? ""} required />
           </Field>
           <Field label="Email">
@@ -129,7 +134,7 @@ export function LeadForm({
             defaultValue={lead?.source}
             required
           />
-          <Field label="Assigned To">
+          <Field label="Assigned To" required>
             <select
               name="assignedToUserId"
               required

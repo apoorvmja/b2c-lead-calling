@@ -19,13 +19,18 @@ const selectClassName =
 function Field({
   label,
   children,
+  required = false,
 }: {
   label: string;
   children: React.ReactNode;
+  required?: boolean;
 }) {
   return (
     <label className="grid gap-2 text-sm">
-      <span className="font-medium">{label}</span>
+      <span className="font-medium">
+        {label}
+        {required ? <span className="text-destructive"> *</span> : null}
+      </span>
       {children}
     </label>
   );
@@ -45,7 +50,7 @@ function SelectField({
   required?: boolean;
 }) {
   return (
-    <Field label={label}>
+    <Field label={label} required={required}>
       <select
         name={name}
         required={required}
@@ -82,7 +87,7 @@ export function VisaForm({
           <CardDescription>Select the student for this visa record</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Field label="Student/Client">
+          <Field label="Student/Client" required>
             <select
               name="studentId"
               required
