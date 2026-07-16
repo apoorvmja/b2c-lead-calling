@@ -30,7 +30,11 @@ export default async function NewApplicationPage() {
         </Button>
       </div>
 
-      <ApplicationForm action={createApplication} students={students} />
+      <ApplicationForm
+        action={createApplication}
+        students={students}
+        submitLabel="Create Application"
+      />
     </>
   );
 }

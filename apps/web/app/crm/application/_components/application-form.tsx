@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { Student } from "@repo/db";
+import type { Student, StudentApplication } from "@repo/db";
 import {
   APPLICATION_STATUS,
   COUNTRIES,
@@ -44,14 +44,20 @@ function SelectField({
   name,
   label,
   data,
+  defaultValue,
 }: {
   name: string;
   label: string;
   data: Record<string, string>;
+  defaultValue?: string | null;
 }) {
   return (
     <Field label={label}>
-      <select name={name} defaultValue="" className={selectClassName}>
+      <select
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        className={selectClassName}
+      >
         <option value="">Select {label.toLowerCase()}</option>
         {Object.entries(data).map(([key, value]) => (
           <option key={key} value={value}>
@@ -66,9 +72,13 @@ function SelectField({
 export function ApplicationForm({
   action,
   students,
+  application,
+  submitLabel,
 }: {
   action: (formData: FormData) => Promise<void>;
   students: Student[];
+  application?: StudentApplication;
+  submitLabel: string;
 }) {
   return (
     <form action={action} className="grid gap-6">
@@ -82,7 +92,7 @@ export function ApplicationForm({
             <select
               name="studentId"
               required
-              defaultValue=""
+              defaultValue={application?.studentId ?? ""}
               className={selectClassName}
             >
               <option value="">
@@ -113,16 +123,30 @@ export function ApplicationForm({
             name="preferredCountry"
             label="Preferred Country"
             data={COUNTRIES}
+            defaultValue={application?.preferredCountry}
           />
-          <SelectField name="course" label="Course" data={COURSES} />
+          <SelectField
+            name="course"
+            label="Course"
+            data={COURSES}
+            defaultValue={application?.course}
+          />
           <Field label="College">
-            <Input name="college" />
+            <Input name="college" defaultValue={application?.college ?? ""} />
           </Field>
           <Field label="Course Duration">
-            <Input name="courseDuration" />
+            <Input
+              name="courseDuration"
+              defaultValue={application?.courseDuration ?? ""}
+            />
           </Field>
           <Field label="Fee">
-            <Input name="fee" type="number" step="0.01" />
+            <Input
+              name="fee"
+              type="number"
+              step="0.01"
+              defaultValue={application?.fee?.toString() ?? ""}
+            />
           </Field>
         </CardContent>
       </Card>
@@ -134,36 +158,60 @@ export function ApplicationForm({
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Field label="Application No">
-            <Input name="applicationNo" />
+            <Input
+              name="applicationNo"
+              defaultValue={application?.applicationNo ?? ""}
+            />
           </Field>
           <Field label="Application Date">
-            <Input name="applicationDate" type="date" />
+            <Input
+              name="applicationDate"
+              type="date"
+              defaultValue={
+                application?.applicationDate?.toISOString().slice(0, 10) ?? ""
+              }
+            />
           </Field>
           <SelectField
             name="applicationStatus"
             label="Application Status"
             data={APPLICATION_STATUS}
+            defaultValue={application?.applicationStatus}
           />
-          <SelectField name="intake" label="Intake" data={INTAKES} />
+          <SelectField
+            name="intake"
+            label="Intake"
+            data={INTAKES}
+            defaultValue={application?.intake}
+          />
           <SelectField
             name="referencePortal"
             label="Reference Portal"
             data={REFERENCE_PORTALS}
+            defaultValue={application?.referencePortal}
           />
           <Field label="Reference Portal Link">
-            <Input name="referencePortalLink" />
+            <Input
+              name="referencePortalLink"
+              defaultValue={application?.referencePortalLink ?? ""}
+            />
           </Field>
           <label className="flex items-center gap-2 self-end text-sm">
             <input
               type="checkbox"
               name="admissionDone"
+              defaultChecked={application?.admissionDone ?? false}
               className="size-4 rounded border-input"
             />
             <span className="font-medium">Admission Done</span>
           </label>
           <div className="md:col-span-2 xl:col-span-3">
             <Field label="Application Remark">
-              <textarea name="applicationRemark" className={textareaClassName} />
+              <textarea
+                name="applicationRemark"
+                defaultValue={application?.applicationRemark ?? ""}
+                className={textareaClassName}
+              />
             </Field>
           </div>
         </CardContent>
@@ -177,7 +225,7 @@ export function ApplicationForm({
         >
           Cancel
         </Button>
-        <Button type="submit">Create Application</Button>
+        <Button type="submit">{submitLabel}</Button>
       </div>
     </form>
   );

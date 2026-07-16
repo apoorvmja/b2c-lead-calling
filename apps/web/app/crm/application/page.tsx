@@ -110,11 +110,11 @@ export default async function ApplicationPage() {
                         size="sm"
                         render={
                           <Link
-                            href={`/crm/student/${application.studentId}/edit`}
+                            href={`/crm/application/${application.id}/edit`}
                           />
                         }
                       >
-                        Student
+                        Edit
                       </Button>
                     </TableCell>
                   </TableRow>
