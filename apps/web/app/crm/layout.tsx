@@ -37,6 +37,7 @@ const primaryNav = [
   { title: "Dashboard", icon: Home, href: "/crm", active: true },
   { title: "Analytics", icon: BarChart3, href: "/crm" },
   { title: "Students", icon: Users, href: "/crm/student" },
+  { title: "Applications", icon: FileText, href: "/crm/application" },
 ];
 
 const leadNav = [

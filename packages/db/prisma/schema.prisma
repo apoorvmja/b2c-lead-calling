@@ -50,19 +50,19 @@ model Lead {
   assignedToUserId String? @map("assigned_to_user_id")
   assignedToUser   User?   @relation(fields: [assignedToUserId], references: [id])
 
-  interestedField    String?   @map("interested_field")
-  country            String
-  purpose            String?
-  status             String
-  englishTest        String?   @map("english_test")
+  interestedField String? @map("interested_field")
+  country         String
+  purpose         String?
+  status          String
+  englishTest     String? @map("english_test")
 
   isConverted        Boolean   @default(false) @map("is_converted")
   convertedAt        DateTime? @map("converted_at")
   convertedStudentId String?   @unique @map("converted_student_id")
   convertedStudent   Student?  @relation("LeadConversion", fields: [convertedStudentId], references: [id])
-  
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   history LeadHistory[]
 
@@ -115,7 +115,8 @@ model Student {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   followUps         StudentFollowUp[]
-  convertedFromLead Lead?             @relation("LeadConversion")
+  applications      StudentApplication[]
+  convertedFromLead Lead?                @relation("LeadConversion")
 
   @@map("student")
 }
@@ -133,4 +134,35 @@ model StudentFollowUp {
   createdAt    DateTime  @default(now()) @map("created_at")
 
   @@map("student_follow_up")
+}
+
+model StudentApplication {
+  id String @id @default(uuid())
+
+  studentId String  @map("student_id")
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  preferredCountry String? @map("preferred_country")
+  college          String?
+  course           String?
+  courseDuration   String? @map("course_duration")
+
+  fee Decimal?
+
+  referencePortal     String? @map("reference_portal")
+  referencePortalLink String? @map("reference_portal_link")
+
+  applicationNo     String?   @unique @map("application_no")
+  applicationDate   DateTime? @map("application_date")
+  applicationStatus String    @default("Application In Progress") @map("application_status")
+  intake            String?
+
+  admissionDone Boolean @default(false) @map("admission_done")
+
+  applicationRemark String? @map("application_remark")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("student_application")
 }
