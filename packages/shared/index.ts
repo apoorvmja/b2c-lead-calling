@@ -6,7 +6,7 @@ export { SOURCES } from "./inquiry-sources";
 export { INTAKES } from "./intakes";
 export { INTERESTED_FIELDS } from "./intrested-fields";
 export { LEAD_ACTIVITIES, type LeadActivity } from "./lead-activities";
-export { USER_ROLES, type UserRole } from "./roles";
+export { ROLE_ROUTES, USER_ROLES, type UserRole } from "./roles";
 export { VISA_TYPES, type VisaType } from "./visa-types";
 export {
   APPLICATION_STATUS,
