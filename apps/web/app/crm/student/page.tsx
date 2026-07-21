@@ -109,7 +109,7 @@ export default async function StudentPage() {
                         .join(" ")}
                     </TableCell>
                     <TableCell>{student.lead.phone}</TableCell>
-                    <TableCell>{student.lead.country}</TableCell>
+                    <TableCell>{student.lead.country ?? "-"}</TableCell>
                     <TableCell>{student.lead.source}</TableCell>
                     <TableCell>
                       <Dialog>

@@ -144,7 +144,7 @@ export default async function StudentFollowUpPage() {
                       </TableCell>
                       <TableCell>{name}</TableCell>
                       <TableCell>{student.lead.phone}</TableCell>
-                      <TableCell>{student.lead.country}</TableCell>
+                      <TableCell>{student.lead.country ?? "-"}</TableCell>
                       <TableCell>
                         <Dialog>
                           <DialogTrigger

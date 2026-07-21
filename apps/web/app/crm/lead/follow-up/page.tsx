@@ -136,7 +136,7 @@ export default async function LeadFollowUpPage() {
                     <TableRow key={lead.id}>
                       <TableCell className="font-medium">{lead.name}</TableCell>
                       <TableCell>{lead.phone}</TableCell>
-                      <TableCell>{lead.country}</TableCell>
+                      <TableCell>{lead.country ?? "-"}</TableCell>
                       <TableCell>
                         <Dialog>
                           <DialogTrigger

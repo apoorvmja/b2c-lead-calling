@@ -158,7 +158,6 @@ export function LeadForm({
             label="Country"
             data={COUNTRIES}
             defaultValue={lead?.country}
-            required
           />
           <SelectField
             name="status"

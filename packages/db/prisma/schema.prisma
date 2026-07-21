@@ -35,7 +35,7 @@ model Lead {
   assignedToUser   User?   @relation(fields: [assignedToUserId], references: [id])
 
   interestedField String? @map("interested_field")
-  country         String
+  country         String?
   purpose         String?
   status          String
   englishTest     String? @map("english_test")

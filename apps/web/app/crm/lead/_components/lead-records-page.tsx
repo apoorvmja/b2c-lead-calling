@@ -112,7 +112,7 @@ export function LeadRecordsPage({
                   <TableRow key={lead.id}>
                     <TableCell className="font-medium">{lead.name}</TableCell>
                     <TableCell>{lead.phone}</TableCell>
-                    <TableCell>{lead.country}</TableCell>
+                    <TableCell>{lead.country ?? "-"}</TableCell>
                     <TableCell>{lead.source}</TableCell>
                     <TableCell>
                       <Dialog>

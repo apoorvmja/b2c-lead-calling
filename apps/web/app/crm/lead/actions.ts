@@ -14,7 +14,7 @@ function leadData(formData: FormData) {
     source: formData.get("source") as string,
     assignedToUserId: formData.get("assignedToUserId") as string,
     interestedField: formData.get("interestedField") as string,
-    country: formData.get("country") as string,
+    country: (formData.get("country") as string) || null,
     purpose: formData.get("purpose") as string,
     status: formData.get("status") as string,
     englishTest: formData.get("englishTest") as string,
