@@ -134,10 +134,9 @@ export function LeadForm({
             defaultValue={lead?.source}
             required
           />
-          <Field label="Assigned To" required>
+          <Field label="Assigned To">
             <select
               name="assignedToUserId"
-              required
               defaultValue={lead?.assignedToUserId ?? ""}
               className={selectClassName}
             >

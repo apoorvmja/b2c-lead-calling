@@ -12,7 +12,6 @@ function leadData(formData: FormData) {
     email: formData.get("email") as string,
     address: formData.get("address") as string,
     source: formData.get("source") as string,
-    assignedToUserId: formData.get("assignedToUserId") as string,
     interestedField: formData.get("interestedField") as string,
     country: (formData.get("country") as string) || null,
     purpose: formData.get("purpose") as string,
@@ -22,17 +21,51 @@ function leadData(formData: FormData) {
 }
 
 export async function createLead(formData: FormData) {
-  await prisma.lead.create({ data: leadData(formData) });
+  const assignedToUserId = formData.get("assignedToUserId") as string;
+
+  await prisma.lead.create({
+    data: {
+      ...leadData(formData),
+      assignedToUser: assignedToUserId
+        ? { connect: { id: assignedToUserId } }
+        : undefined,
+    },
+  });
   redirect("/crm/lead");
 }
 
 export async function updateLead(id: string, formData: FormData) {
+  const assignedToUserId = formData.get("assignedToUserId") as string;
+
   await prisma.lead.update({
     where: { id },
-    data: leadData(formData),
+    data: {
+      ...leadData(formData),
+      assignedToUser: assignedToUserId
+        ? { connect: { id: assignedToUserId } }
+        : { disconnect: true },
+    },
   });
 
   redirect("/crm/lead");
+}
+
+export async function allocateUnallocatedLeads(formData: FormData) {
+  const assignedToUserId = formData.get("assignedToUserId") as string;
+  const leads = await prisma.lead.findMany({
+    where: { assignedToUserId: null },
+    select: { id: true },
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+
+  await prisma.lead.updateMany({
+    where: { id: { in: leads.map((lead) => lead.id) } },
+    data: { assignedToUserId },
+  });
+
+  revalidatePath("/crm/lead/unallocated");
+  revalidatePath("/crm/lead");
 }
 
 export async function createLeadHistory(leadId: string, formData: FormData) {
