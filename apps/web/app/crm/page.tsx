@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@repo/db";
 import type { Lead, LeadHistory, Student, StudentFollowUp, User } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -51,6 +52,14 @@ function studentName(student: Pick<Student, "firstName" | "middleName" | "surnam
 }
 
 export default async function CrmPage() {
+  const {
+    leadWhere,
+    studentWhere,
+    applicationWhere,
+    visaWhere,
+    leadHistoryWhere,
+    studentFollowUpWhere,
+  } = await getCrmRecordScope();
   const startOfTomorrow = new Date();
   startOfTomorrow.setHours(0, 0, 0, 0);
   startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
@@ -65,11 +74,14 @@ export default async function CrmPage() {
     recentLeadHistory,
     recentStudentFollowUps,
   ] = await Promise.all([
-    prisma.lead.count(),
-    prisma.student.count(),
-    prisma.studentApplication.count({ where: { admissionDone: false } }),
-    prisma.studentVisa.count({ where: { visaDone: false } }),
+    prisma.lead.count({ where: leadWhere }),
+    prisma.student.count({ where: studentWhere }),
+    prisma.studentApplication.count({
+      where: { ...applicationWhere, admissionDone: false },
+    }),
+    prisma.studentVisa.count({ where: { ...visaWhere, visaDone: false } }),
     prisma.lead.findMany({
+      where: leadWhere,
       include: {
         assignedToUser: true,
         history: { orderBy: { createdAt: "desc" } },
@@ -77,6 +89,7 @@ export default async function CrmPage() {
       orderBy: { createdAt: "desc" },
     }),
     prisma.student.findMany({
+      where: studentWhere,
       include: {
         lead: { include: { assignedToUser: true } },
         followUps: { orderBy: { createdAt: "desc" } },
@@ -84,11 +97,13 @@ export default async function CrmPage() {
       orderBy: { createdAt: "desc" },
     } as never),
     prisma.leadHistory.findMany({
+      where: leadHistoryWhere,
       include: { lead: { select: { name: true, phone: true } } },
       orderBy: { createdAt: "desc" },
       take: 5,
     }),
     prisma.studentFollowUp.findMany({
+      where: studentFollowUpWhere,
       include: {
         student: {
           select: { firstName: true, middleName: true, surname: true },

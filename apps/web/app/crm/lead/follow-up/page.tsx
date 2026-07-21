@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@repo/db";
 import type { Lead, LeadHistory, User } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,11 +44,13 @@ function formatDate(date?: Date | null) {
 }
 
 export default async function LeadFollowUpPage() {
+  const { leadWhere } = await getCrmRecordScope();
   const startOfTomorrow = new Date();
   startOfTomorrow.setHours(0, 0, 0, 0);
   startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
 
   const leads = (await prisma.lead.findMany({
+    where: leadWhere,
     include: {
       assignedToUser: true,
       history: { orderBy: { createdAt: "desc" } },

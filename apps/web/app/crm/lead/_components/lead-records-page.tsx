@@ -29,6 +29,7 @@ import {
 
 import { createLeadHistory } from "../actions";
 import { StatusBadge } from "../../_components/status-badge";
+import { LeadCallButton } from "./lead-call-button";
 import { LeadHistoryForm } from "./lead-history-form";
 import { LeadHistoryTable } from "./lead-history-table";
 
@@ -93,7 +94,7 @@ export function LeadRecordsPage({
                 <TableHead>Status</TableHead>
                 <TableHead>Interested Field</TableHead>
                 <TableHead>Assigned To</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -143,14 +144,17 @@ export function LeadRecordsPage({
                       {lead.assignedToUser?.fullName ?? "Unassigned"}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        nativeButton={false}
-                        variant="outline"
-                        size="sm"
-                        render={<Link href={`/crm/lead/${lead.id}/edit`} />}
-                      >
-                        Edit
-                      </Button>
+                      <div className="flex justify-end gap-2">
+                        <LeadCallButton phone={lead.phone} />
+                        <Button
+                          nativeButton={false}
+                          variant="outline"
+                          size="sm"
+                          render={<Link href={`/crm/lead/${lead.id}/edit`} />}
+                        >
+                          Edit
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

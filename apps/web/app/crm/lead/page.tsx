@@ -1,9 +1,13 @@
 import { prisma } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
+
 import { LeadRecordsPage } from "./_components/lead-records-page";
 
 export default async function LeadPage() {
+  const { leadWhere } = await getCrmRecordScope();
   const leads = await prisma.lead.findMany({
+    where: leadWhere,
     include: {
       assignedToUser: true,
       history: { orderBy: { createdAt: "desc" } },

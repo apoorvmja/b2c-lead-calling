@@ -7,6 +7,7 @@ import type {
   StudentApplication,
 } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,7 +44,9 @@ type ApplicationWithDetails = StudentApplication & {
 };
 
 export default async function ApplicationPage() {
+  const { applicationWhere } = await getCrmRecordScope();
   const applications = (await prisma.studentApplication.findMany({
+    where: applicationWhere,
     include: {
       student: true,
       updates: { orderBy: { createdAt: "desc" } },

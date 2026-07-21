@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@repo/db";
 import type { Lead, Student, StudentFollowUp, User } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -39,7 +40,9 @@ type StudentWithDetails = Student & {
 };
 
 export default async function StudentPage() {
+  const { studentWhere } = await getCrmRecordScope();
   const students = (await prisma.student.findMany({
+    where: studentWhere,
     include: {
       lead: { include: { assignedToUser: true } },
       followUps: { orderBy: { createdAt: "desc" } },

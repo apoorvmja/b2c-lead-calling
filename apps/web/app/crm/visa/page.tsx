@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@repo/db";
 import type { Lead, Student, StudentVisa, StudentVisaUpdate } from "@repo/db";
 
+import { getCrmRecordScope } from "@/lib/crm-record-scope";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -39,7 +40,9 @@ type VisaWithDetails = StudentVisa & {
 };
 
 export default async function VisaPage() {
+  const { visaWhere } = await getCrmRecordScope();
   const visas = (await prisma.studentVisa.findMany({
+    where: visaWhere,
     include: {
       student: { include: { lead: true } },
       updates: { orderBy: { createdAt: "desc" } },
