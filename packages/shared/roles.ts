@@ -12,6 +12,10 @@ export const ROLE_ROUTES: { path: string; roles: UserRole[] }[] = [
         roles: [USER_ROLES.ADMIN],
     },
     {
+        path: "/crm/lead/bulk-upload",
+        roles: [USER_ROLES.ADMIN],
+    },
+    {
         path: "/crm/master",
         roles: [USER_ROLES.ADMIN],
     },

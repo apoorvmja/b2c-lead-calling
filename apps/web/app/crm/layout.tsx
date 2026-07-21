@@ -27,6 +27,7 @@ const leadNav = [
   { title: "Lead Details", href: "/crm/lead" },
   { title: "Lead Follow Ups", href: "/crm/lead/follow-up" },
   { title: "Unallocated Leads", href: "/crm/lead/unallocated" },
+  { title: "Bulk Upload", href: "/crm/lead/bulk-upload" },
 ];
 
 const studentNav = [
