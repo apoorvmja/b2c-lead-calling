@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Delete, Mic, MicOff, Phone, PhoneCall, PhoneOff } from "lucide-react";
 
 import {
@@ -22,6 +22,7 @@ type VobizClient = {
   answer: () => void;
   reject: () => void;
   hangup: () => void;
+  logout: () => void;
   mute: () => void;
   unmute: () => void;
   sendDtmf: (key: string) => void;
@@ -81,7 +82,7 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
   const [isInCall, setIsInCall] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
-  function resetCallState(nextStatus = "Registered") {
+  const resetCallState = useCallback((nextStatus = "Registered") => {
     audioAttachedRef.current = false;
     isInCallRef.current = false;
     setIsInCall(false);
@@ -89,9 +90,9 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
     setIncomingCaller("");
     setWaitingCaller("");
     setStatus(nextStatus);
-  }
+  }, []);
 
-  function attachRemoteAudio() {
+  const attachRemoteAudio = useCallback(() => {
     window.setTimeout(() => {
       const client = vobizRef.current?.client;
       let stream = client?.remoteView?.srcObject;
@@ -109,13 +110,19 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
       audioRef.current.srcObject = stream;
       audioRef.current.play();
     }, 1500);
-  }
+  }, []);
 
-  function registerEvents(client: VobizClient) {
+  const registerEvents = useCallback((client: VobizClient) => {
     client.on("onWebrtcNotSupported", () => setStatus("Unsupported"));
     client.on("onLogin", () => setStatus("Registered"));
-    client.on("onLoginFailed", () => setStatus("Login Failed"));
-    client.on("onLogout", () => resetCallState("Disconnected"));
+    client.on("onLoginFailed", () => {
+      vobizRef.current = null;
+      setStatus("Login Failed");
+    });
+    client.on("onLogout", () => {
+      vobizRef.current = null;
+      resetCallState("Disconnected");
+    });
     client.on("onCallRemoteRinging", () => setStatus("Ringing"));
     client.on("onCallAnswered", () => {
       if (audioAttachedRef.current) return;
@@ -146,9 +153,9 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
       setWaitingCaller("");
       setStatus(isInCallRef.current ? "In Call" : "Registered");
     });
-  }
+  }, [attachRemoteAudio, resetCallState]);
 
-  function connect() {
+  const connect = useCallback(() => {
     if (!window.Vobiz || !username || !password || vobizRef.current) return;
 
     setStatus("Connecting");
@@ -163,7 +170,7 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
     vobizRef.current = vobiz;
     registerEvents(vobiz.client);
     vobiz.client.login(username, password);
-  }
+  }, [registerEvents]);
 
   function call() {
     if (!destination.trim() || !vobizRef.current) return;
@@ -220,13 +227,27 @@ export function VobizDialer({ phoneNumber }: { phoneNumber?: string }) {
     setIsMuted((value) => !value);
   }
 
+  const doLogout = useCallback(() => {
+    if (vobizRef.current) {
+      vobizRef.current.client.logout();
+    }
+  }, []);
+
+  useEffect(() => {
+    connect();
+
+    return () => {
+      doLogout();
+    };
+  }, [connect, doLogout]);
+
   const isRegistered = status === "Registered" || isInCall;
 
   return (
     <>
       <Script
         src="https://unpkg.com/vobiz-webrtc-sdk@1.0.3/dist/vobiz-webrtc-sdk.min.js"
-        onLoad={connect}
+        onReady={connect}
       />
 
       <div className="grid w-full mx-auto max-w-sm gap-3">
