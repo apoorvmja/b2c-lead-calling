@@ -3,6 +3,9 @@
   "ui": "tui",
   "globalEnv": ["DATABASE_URL", "COOKIE_SECRET"],
   "tasks": {
+    "@repo/db#build": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
