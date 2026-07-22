@@ -21,7 +21,10 @@ export default async function EditLeadPage({
     where: { id },
     include: {
       convertedStudent: true,
-      history: { orderBy: { createdAt: "desc" } },
+      history: {
+        include: { callRecord: true },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 

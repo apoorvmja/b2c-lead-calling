@@ -1,5 +1,8 @@
-import type { LeadHistory } from "@repo/db";
+import { ExternalLink } from "lucide-react";
 
+import type { CallRecord, LeadHistory } from "@repo/db";
+
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,11 +14,19 @@ import {
 
 import { StatusBadge } from "../../_components/status-badge";
 
+type LeadHistoryWithCallRecord = LeadHistory & {
+  callRecord?: CallRecord | null;
+};
+
 function formatDate(date?: Date | null) {
   return date ? date.toLocaleDateString("en-IN") : "-";
 }
 
-export function LeadHistoryTable({ history }: { history: LeadHistory[] }) {
+export function LeadHistoryTable({
+  history,
+}: {
+  history: LeadHistoryWithCallRecord[];
+}) {
   return (
     <Table>
       <TableHeader>
@@ -25,6 +36,7 @@ export function LeadHistoryTable({ history }: { history: LeadHistory[] }) {
           <TableHead>Follow Up</TableHead>
           <TableHead>Follow Up Date</TableHead>
           <TableHead>Remarks</TableHead>
+          <TableHead>Recording</TableHead>
           <TableHead>Created</TableHead>
         </TableRow>
       </TableHeader>
@@ -32,7 +44,7 @@ export function LeadHistoryTable({ history }: { history: LeadHistory[] }) {
         {history.length === 0 ? (
           <TableRow>
             <TableCell
-              colSpan={6}
+              colSpan={7}
               className="h-24 text-center text-muted-foreground"
             >
               No lead history added yet.
@@ -49,6 +61,27 @@ export function LeadHistoryTable({ history }: { history: LeadHistory[] }) {
               <TableCell>{formatDate(entry.followUpDate)}</TableCell>
               <TableCell className="max-w-sm whitespace-normal">
                 {entry.remarks || "-"}
+              </TableCell>
+              <TableCell>
+                {entry.callRecord?.recordingUrl ? (
+                  <Button
+                    nativeButton={false}
+                    variant="outline"
+                    size="sm"
+                    render={
+                      <a
+                        href={entry.callRecord.recordingUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      />
+                    }
+                  >
+                    <ExternalLink />
+                    Open
+                  </Button>
+                ) : (
+                  "-"
+                )}
               </TableCell>
               <TableCell>{formatDate(entry.createdAt)}</TableCell>
             </TableRow>

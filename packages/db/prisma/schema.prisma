@@ -19,6 +19,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   assignedLeads Lead[]
+  callRecords   CallRecord[]
 
   @@map("user")
 }
@@ -58,22 +59,43 @@ model LeadHistory {
   leadId String @map("lead_id")
   lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
+  callRecordId String?     @map("call_record_id")
+  callRecord   CallRecord? @relation(fields: [callRecordId], references: [id], onDelete: SetNull)
+
   status       String
   activity     String
   remarks      String?
   followUp     Boolean   @default(false) @map("follow_up")
   followUpDate DateTime? @map("follow_up_date")
-  createdAt    DateTime  @default(now()) @map("created_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("lead_history")
 }
 
-model Student {
-  id               String    @id @default(uuid())
+model CallRecord {
+  id String @id @default(uuid())
 
-  leadId           String    @unique @map("lead_id")
-  lead             Lead      @relation("LeadConversion", fields: [leadId], references: [id])
-  
+  calledByUserId String? @map("called_by_user_id")
+  calledByUser   User?   @relation(fields: [calledByUserId], references: [id], onDelete: SetNull)
+
+  recordingUrl        String? @map("recording_url")
+  recordingDurationMs Int?    @map("recording_duration_ms")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  leadHistories LeadHistory[]
+
+  @@map("call_record")
+}
+
+model Student {
+  id String @id @default(uuid())
+
+  leadId String @unique @map("lead_id")
+  lead   Lead   @relation("LeadConversion", fields: [leadId], references: [id])
+
   enrollmentNumber String    @unique @map("enrollment_number")
   enrollmentDate   DateTime  @map("enrollment_date")
   firstName        String    @map("first_name")
