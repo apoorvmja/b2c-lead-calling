@@ -1,6 +1,5 @@
 "use server";
 
-/* eslint-disable turbo/no-undeclared-env-vars */
 import { createHmac } from "crypto";
 
 import { cookies } from "next/headers";

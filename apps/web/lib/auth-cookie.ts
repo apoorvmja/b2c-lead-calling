@@ -1,4 +1,3 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
 import type { UserRole } from "@repo/shared";
 
 export const USER_COOKIE_NAME = "b2c-calling-user-cookie";

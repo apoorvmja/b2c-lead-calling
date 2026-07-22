@@ -1,21 +1,42 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
-  "globalEnv": ["DATABASE_URL", "COOKIE_SECRET"],
+  "globalEnv": [
+    "DATABASE_URL",
+    "COOKIE_SECRET",
+    "CALLER_ID",
+    "NEXT_PUBLIC_VOBIZ_SDK_PASSWORD",
+    "NEXT_PUBLIC_VOBIZ_SDK_USERNAME",
+    "SIP_ENDPOINT",
+    "VOBIZ_RECORDING_CALLBACK_URL"
+  ],
   "tasks": {
     "@repo/db#build": {
       "cache": false
     },
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "!.next/dev/**"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": [
+        "^check-types"
+      ]
     },
     "dev": {
       "cache": false,

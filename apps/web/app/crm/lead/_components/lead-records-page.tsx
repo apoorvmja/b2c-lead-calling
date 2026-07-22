@@ -26,10 +26,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { VobizCallWrapper } from "@/app/(dialer)/_components/vobiz-call-wrapper";
 
 import { createLeadHistory } from "../actions";
 import { StatusBadge } from "../../_components/status-badge";
-import { LeadCallButton } from "./lead-call-button";
 import { LeadHistoryForm } from "./lead-history-form";
 import { LeadHistoryTable } from "./lead-history-table";
 
@@ -145,7 +145,7 @@ export function LeadRecordsPage({
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <LeadCallButton phone={lead.phone} />
+                        <VobizCallWrapper phoneNumber={lead.phone} />
                         <Button
                           nativeButton={false}
                           variant="outline"
