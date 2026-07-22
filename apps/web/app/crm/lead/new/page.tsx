@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { LeadForm } from "../_components/lead-form";
 import { createLead } from "../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewLeadPage() {
   const users = await prisma.user.findMany({
     where: { isActive: true },

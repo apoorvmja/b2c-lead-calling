@@ -34,6 +34,8 @@ import { StatusBadge } from "../_components/status-badge";
 import { VisaUpdateForm } from "./_components/visa-update-form";
 import { VisaUpdatesTable } from "./_components/visa-updates-table";
 
+export const dynamic = "force-dynamic";
+
 type VisaWithDetails = StudentVisa & {
   student: Student & { lead: Lead };
   updates: StudentVisaUpdate[];

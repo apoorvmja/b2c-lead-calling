@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { createVisa } from "../actions";
 import { VisaForm } from "../_components/visa-form";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewVisaPage() {
   const students = await prisma.student.findMany({
     orderBy: { createdAt: "desc" },

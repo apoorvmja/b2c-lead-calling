@@ -9,6 +9,8 @@ import { LeadForm } from "../../_components/lead-form";
 import { LeadHistoryCard } from "../../_components/lead-history-card";
 import { updateLead } from "../../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditLeadPage({
   params,
 }: {

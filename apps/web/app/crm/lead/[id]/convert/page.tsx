@@ -9,6 +9,8 @@ import { StudentForm } from "../../../student/_components/student-form";
 import { convertLeadToStudent } from "../../../student/actions";
 import { nextEnrollmentNumber } from "../../../student/enrollment-number";
 
+export const dynamic = "force-dynamic";
+
 export default async function ConvertLeadPage({
   params,
 }: {

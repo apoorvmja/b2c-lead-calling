@@ -9,6 +9,8 @@ import { StudentFollowUpsCard } from "../../_components/student-follow-ups-card"
 import { StudentForm } from "../../_components/student-form";
 import { updateStudent } from "../../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditStudentPage({
   params,
 }: {

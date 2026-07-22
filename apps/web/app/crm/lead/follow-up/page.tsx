@@ -34,6 +34,8 @@ import { StatusBadge } from "../../_components/status-badge";
 import { LeadHistoryForm } from "../_components/lead-history-form";
 import { LeadHistoryTable } from "../_components/lead-history-table";
 
+export const dynamic = "force-dynamic";
+
 type LeadWithHistory = Lead & {
   assignedToUser: User | null;
   history: LeadHistory[];

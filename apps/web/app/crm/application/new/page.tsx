@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { ApplicationForm } from "../_components/application-form";
 import { createApplication } from "../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewApplicationPage() {
   const students = await prisma.student.findMany({
     orderBy: { createdAt: "desc" },

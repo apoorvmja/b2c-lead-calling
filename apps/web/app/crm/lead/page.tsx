@@ -4,6 +4,8 @@ import { getCrmRecordScope } from "@/lib/crm-record-scope";
 
 import { LeadRecordsPage } from "./_components/lead-records-page";
 
+export const dynamic = "force-dynamic";
+
 export default async function LeadPage() {
   const { leadWhere } = await getCrmRecordScope();
   const leads = await prisma.lead.findMany({

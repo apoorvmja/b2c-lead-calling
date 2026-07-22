@@ -9,6 +9,8 @@ import { VisaForm } from "../../_components/visa-form";
 import { VisaUpdatesCard } from "../../_components/visa-updates-card";
 import { updateVisa } from "../../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditVisaPage({
   params,
 }: {

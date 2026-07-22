@@ -34,6 +34,8 @@ import { StatusBadge } from "../_components/status-badge";
 import { StudentFollowUpForm } from "./_components/student-follow-up-form";
 import { StudentFollowUpsTable } from "./_components/student-follow-ups-table";
 
+export const dynamic = "force-dynamic";
+
 type StudentWithDetails = Student & {
   lead: Lead & { assignedToUser: User | null };
   followUps: StudentFollowUp[];

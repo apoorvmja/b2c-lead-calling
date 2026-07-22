@@ -23,6 +23,8 @@ import {
 
 import { StatusBadge } from "./_components/status-badge";
 
+export const dynamic = "force-dynamic";
+
 type LeadWithHistory = Lead & {
   assignedToUser: User | null;
   history: LeadHistory[];

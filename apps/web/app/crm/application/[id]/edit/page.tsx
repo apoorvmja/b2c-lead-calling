@@ -9,6 +9,8 @@ import { ApplicationForm } from "../../_components/application-form";
 import { ApplicationUpdatesCard } from "../../_components/application-updates-card";
 import { updateApplication } from "../../actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditApplicationPage({
   params,
 }: {

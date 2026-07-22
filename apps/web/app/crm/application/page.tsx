@@ -38,6 +38,8 @@ import { StatusBadge } from "../_components/status-badge";
 import { ApplicationUpdateForm } from "./_components/application-update-form";
 import { ApplicationUpdatesTable } from "./_components/application-updates-table";
 
+export const dynamic = "force-dynamic";
+
 type ApplicationWithDetails = StudentApplication & {
   student: Student;
   updates: ApplicationUpdate[];
