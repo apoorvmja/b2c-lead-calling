@@ -41,9 +41,7 @@ export async function login(formData: FormData) {
     const payload = Buffer.from(JSON.stringify(user)).toString("base64url");
     const signature = signCookieValue(payload);
 
-    (await cookies()).set(
-        USER_COOKIE_NAME,
-        `${payload}.${signature}`,
+    (await cookies()).set(USER_COOKIE_NAME, `${payload}.${signature}`,
         {
             expires: new Date("9999-12-31T23:59:59.999Z"),
             httpOnly: true,
