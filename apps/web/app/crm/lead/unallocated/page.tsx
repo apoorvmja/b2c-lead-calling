@@ -23,7 +23,10 @@ export default async function UnallocatedLeadsPage() {
       where: { assignedToUserId: null },
       include: {
         assignedToUser: true,
-        history: { orderBy: { createdAt: "desc" } },
+        history: {
+          include: { callRecord: true },
+          orderBy: { createdAt: "desc" },
+        },
       },
       orderBy: { createdAt: "desc" },
     }),

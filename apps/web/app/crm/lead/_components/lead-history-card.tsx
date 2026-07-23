@@ -1,4 +1,4 @@
-import type { LeadHistory } from "@repo/db";
+import type { CallRecord, LeadHistory } from "@repo/db";
 
 import {
   Card,
@@ -17,7 +17,7 @@ export function LeadHistoryCard({
   history,
 }: {
   leadId: string;
-  history: LeadHistory[];
+  history: (LeadHistory & { callRecord?: CallRecord | null })[];
 }) {
   const action = createLeadHistory.bind(null, leadId);
 

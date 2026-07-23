@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { Lead, LeadHistory, User } from "@repo/db";
+import type { CallRecord, Lead, LeadHistory, User } from "@repo/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,7 @@ import { LeadHistoryTable } from "./lead-history-table";
 
 type LeadWithAssignedUser = Lead & {
   assignedToUser: User | null;
-  history: LeadHistory[];
+  history: (LeadHistory & { callRecord?: CallRecord | null })[];
 };
 
 export function LeadRecordsPage({
