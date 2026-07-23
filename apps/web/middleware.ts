@@ -9,10 +9,17 @@ function matchesRoute(pathname: string, routePath: string) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const role = await getRoleFromToken(request.cookies.get(USER_COOKIE_NAME)?.value);
+  const authCookie = request.cookies.get(USER_COOKIE_NAME)?.value;
+  const role = await getRoleFromToken(authCookie);
 
   if (!role) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const response = NextResponse.redirect(new URL("/login", request.url));
+
+    if (authCookie) {
+      response.cookies.delete(USER_COOKIE_NAME);
+    }
+
+    return response;
   }
 
   const protectedRoute = ROLE_ROUTES.find((route) =>

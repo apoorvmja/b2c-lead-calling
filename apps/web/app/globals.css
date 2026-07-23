@@ -10,6 +10,14 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -157,5 +165,26 @@ a {
   }
   html {
     @apply font-sans;
+  }
+  select {
+    color: var(--foreground);
+    color-scheme: light;
+  }
+  select option,
+  select optgroup {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+  }
+  select option:disabled {
+    color: var(--muted-foreground);
+  }
+  .dark select {
+    color: var(--foreground);
+    color-scheme: dark;
+  }
+  .dark select option,
+  .dark select optgroup {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
   }
 }
