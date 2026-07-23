@@ -1,8 +1,5 @@
-import { ExternalLink } from "lucide-react";
-
 import type { CallRecord, LeadHistory } from "@repo/db";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -12,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { CallRecordingPlayer } from "../../_components/call-recording-player";
 import { StatusBadge } from "../../_components/status-badge";
 
 type LeadHistoryWithCallRecord = LeadHistory & {
@@ -64,21 +62,7 @@ export function LeadHistoryTable({
               </TableCell>
               <TableCell>
                 {entry.callRecord?.recordingUrl ? (
-                  <Button
-                    nativeButton={false}
-                    variant="outline"
-                    size="sm"
-                    render={
-                      <a
-                        href={entry.callRecord.recordingUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      />
-                    }
-                  >
-                    <ExternalLink />
-                    Open
-                  </Button>
+                  <CallRecordingPlayer callRecordId={entry.callRecord.id} />
                 ) : (
                   "-"
                 )}
