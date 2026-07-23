@@ -66,7 +66,7 @@ export function LeadHistoryForm({
         />
         <span className="font-medium">Follow up required</span>
       </label>
-      <Input name="followUpDate" type="date" />
+      <Input name="followUpDate" type="date" required={followUp} />
       <div className="md:col-span-2 xl:col-span-4">
         <textarea
           name="remarks"
