@@ -26,6 +26,7 @@ const primaryNav = [
 const leadNav = [
   { title: "Lead Details", href: "/crm/lead" },
   { title: "Lead Follow Ups", href: "/crm/lead/follow-up" },
+  { title: "Allocated Leads", href: "/crm/lead/allocated" },
   { title: "Unallocated Leads", href: "/crm/lead/unallocated" },
   { title: "Bulk Upload", href: "/crm/lead/bulk-upload" },
 ];

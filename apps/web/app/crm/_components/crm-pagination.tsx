@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 export function CrmPagination({
   basePath,
   page,
+  query,
   totalPages,
 }: {
   basePath: string;
   page: number;
+  query?: string;
   totalPages: number;
 }) {
   if (totalPages <= 1) {
@@ -26,7 +28,11 @@ export function CrmPagination({
             nativeButton={false}
             variant="outline"
             size="sm"
-            render={<Link href={`${basePath}?page=${page - 1}`} />}
+            render={
+              <Link
+                href={`${basePath}?${query ? `${query}&` : ""}page=${page - 1}`}
+              />
+            }
           >
             Previous
           </Button>
@@ -36,7 +42,11 @@ export function CrmPagination({
             nativeButton={false}
             variant="outline"
             size="sm"
-            render={<Link href={`${basePath}?page=${page + 1}`} />}
+            render={
+              <Link
+                href={`${basePath}?${query ? `${query}&` : ""}page=${page + 1}`}
+              />
+            }
           >
             Next
           </Button>

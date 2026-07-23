@@ -51,6 +51,7 @@ export function LeadRecordsPage({
   page,
   pageSize,
   basePath,
+  paginationQuery,
 }: {
   title: string;
   description: string;
@@ -63,6 +64,7 @@ export function LeadRecordsPage({
   page?: number;
   pageSize?: number;
   basePath?: string;
+  paginationQuery?: string;
 }) {
   const totalPages = pageSize ? Math.ceil(totalCount / pageSize) : 1;
 
@@ -176,6 +178,7 @@ export function LeadRecordsPage({
             <CrmPagination
               basePath={basePath}
               page={page}
+              query={paginationQuery}
               totalPages={totalPages}
             />
           ) : null}

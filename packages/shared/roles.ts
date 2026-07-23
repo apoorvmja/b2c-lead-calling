@@ -8,6 +8,10 @@ export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 export const ROLE_ROUTES: { path: string; roles: UserRole[] }[] = [
     {
+        path: "/crm/lead/allocated",
+        roles: [USER_ROLES.ADMIN],
+    },
+    {
         path: "/crm/lead/unallocated",
         roles: [USER_ROLES.ADMIN],
     },

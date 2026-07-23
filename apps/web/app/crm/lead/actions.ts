@@ -68,6 +68,25 @@ export async function allocateUnallocatedLeads(formData: FormData) {
   revalidatePath("/crm/lead");
 }
 
+export async function unallocateAssignedLeads(formData: FormData) {
+  const assignedToUserId = formData.get("assignedToUserId") as string;
+  const leads = await prisma.lead.findMany({
+    where: { assignedToUserId },
+    select: { id: true },
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+
+  await prisma.lead.updateMany({
+    where: { id: { in: leads.map((lead) => lead.id) } },
+    data: { assignedToUserId: null },
+  });
+
+  revalidatePath("/crm/lead/allocated");
+  revalidatePath("/crm/lead/unallocated");
+  revalidatePath("/crm/lead");
+}
+
 export async function createLeadHistory(leadId: string, formData: FormData) {
   const status = formData.get("status") as string;
 
