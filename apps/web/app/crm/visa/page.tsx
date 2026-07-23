@@ -30,27 +30,42 @@ import {
 } from "@/components/ui/table";
 
 import { createVisaUpdate } from "./actions";
+import { CrmPagination } from "../_components/crm-pagination";
 import { StatusBadge } from "../_components/status-badge";
 import { VisaUpdateForm } from "./_components/visa-update-form";
 import { VisaUpdatesTable } from "./_components/visa-updates-table";
 
 export const dynamic = "force-dynamic";
 
+const pageSize = 50;
+
 type VisaWithDetails = StudentVisa & {
   student: Student & { lead: Lead };
   updates: StudentVisaUpdate[];
 };
 
-export default async function VisaPage() {
+export default async function VisaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const page = Math.max(Number((await searchParams).page) || 1, 1);
   const { visaWhere } = await getCrmRecordScope();
-  const visas = (await prisma.studentVisa.findMany({
-    where: visaWhere,
-    include: {
-      student: { include: { lead: true } },
-      updates: { orderBy: { createdAt: "desc" } },
-    },
-    orderBy: { createdAt: "desc" },
-  } as never)) as VisaWithDetails[];
+  const [totalVisas, pagedVisas] = await Promise.all([
+    prisma.studentVisa.count({ where: visaWhere }),
+    prisma.studentVisa.findMany({
+      where: visaWhere,
+      include: {
+        student: { include: { lead: true } },
+        updates: { orderBy: { createdAt: "desc" } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    } as never),
+  ]);
+  const visas = pagedVisas as VisaWithDetails[];
+  const totalPages = Math.ceil(totalVisas / pageSize);
 
   return (
     <>
@@ -73,7 +88,7 @@ export default async function VisaPage() {
       <Card>
         <CardHeader>
           <CardDescription>Total visas</CardDescription>
-          <CardTitle className="text-3xl">{visas.length}</CardTitle>
+          <CardTitle className="text-3xl">{totalVisas}</CardTitle>
         </CardHeader>
       </Card>
 
@@ -165,6 +180,11 @@ export default async function VisaPage() {
               )}
             </TableBody>
           </Table>
+          <CrmPagination
+            basePath="/crm/visa"
+            page={page}
+            totalPages={totalPages}
+          />
         </CardContent>
       </Card>
     </>

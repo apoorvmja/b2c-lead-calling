@@ -34,27 +34,42 @@ import {
 } from "@/components/ui/table";
 
 import { createApplicationUpdate } from "./actions";
+import { CrmPagination } from "../_components/crm-pagination";
 import { StatusBadge } from "../_components/status-badge";
 import { ApplicationUpdateForm } from "./_components/application-update-form";
 import { ApplicationUpdatesTable } from "./_components/application-updates-table";
 
 export const dynamic = "force-dynamic";
 
+const pageSize = 50;
+
 type ApplicationWithDetails = StudentApplication & {
   student: Student;
   updates: ApplicationUpdate[];
 };
 
-export default async function ApplicationPage() {
+export default async function ApplicationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const page = Math.max(Number((await searchParams).page) || 1, 1);
   const { applicationWhere } = await getCrmRecordScope();
-  const applications = (await prisma.studentApplication.findMany({
-    where: applicationWhere,
-    include: {
-      student: true,
-      updates: { orderBy: { createdAt: "desc" } },
-    },
-    orderBy: { createdAt: "desc" },
-  } as never)) as ApplicationWithDetails[];
+  const [totalApplications, pagedApplications] = await Promise.all([
+    prisma.studentApplication.count({ where: applicationWhere }),
+    prisma.studentApplication.findMany({
+      where: applicationWhere,
+      include: {
+        student: true,
+        updates: { orderBy: { createdAt: "desc" } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    } as never),
+  ]);
+  const applications = pagedApplications as ApplicationWithDetails[];
+  const totalPages = Math.ceil(totalApplications / pageSize);
 
   return (
     <>
@@ -77,7 +92,7 @@ export default async function ApplicationPage() {
       <Card>
         <CardHeader>
           <CardDescription>Total applications</CardDescription>
-          <CardTitle className="text-3xl">{applications.length}</CardTitle>
+          <CardTitle className="text-3xl">{totalApplications}</CardTitle>
         </CardHeader>
       </Card>
 
@@ -183,6 +198,11 @@ export default async function ApplicationPage() {
               )}
             </TableBody>
           </Table>
+          <CrmPagination
+            basePath="/crm/application"
+            page={page}
+            totalPages={totalPages}
+          />
         </CardContent>
       </Card>
     </>

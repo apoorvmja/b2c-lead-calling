@@ -30,27 +30,42 @@ import {
 } from "@/components/ui/table";
 
 import { createStudentFollowUp } from "./actions";
+import { CrmPagination } from "../_components/crm-pagination";
 import { StatusBadge } from "../_components/status-badge";
 import { StudentFollowUpForm } from "./_components/student-follow-up-form";
 import { StudentFollowUpsTable } from "./_components/student-follow-ups-table";
 
 export const dynamic = "force-dynamic";
 
+const pageSize = 50;
+
 type StudentWithDetails = Student & {
   lead: Lead & { assignedToUser: User | null };
   followUps: StudentFollowUp[];
 };
 
-export default async function StudentPage() {
+export default async function StudentPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const page = Math.max(Number((await searchParams).page) || 1, 1);
   const { studentWhere } = await getCrmRecordScope();
-  const students = (await prisma.student.findMany({
-    where: studentWhere,
-    include: {
-      lead: { include: { assignedToUser: true } },
-      followUps: { orderBy: { createdAt: "desc" } },
-    },
-    orderBy: { createdAt: "desc" },
-  } as never)) as StudentWithDetails[];
+  const [totalStudents, pagedStudents] = await Promise.all([
+    prisma.student.count({ where: studentWhere }),
+    prisma.student.findMany({
+      where: studentWhere,
+      include: {
+        lead: { include: { assignedToUser: true } },
+        followUps: { orderBy: { createdAt: "desc" } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    } as never),
+  ]);
+  const students = pagedStudents as StudentWithDetails[];
+  const totalPages = Math.ceil(totalStudents / pageSize);
 
   return (
     <>
@@ -66,7 +81,7 @@ export default async function StudentPage() {
       <Card>
         <CardHeader>
           <CardDescription>Total students</CardDescription>
-          <CardTitle className="text-3xl">{students.length}</CardTitle>
+          <CardTitle className="text-3xl">{totalStudents}</CardTitle>
         </CardHeader>
       </Card>
 
@@ -169,6 +184,11 @@ export default async function StudentPage() {
               )}
             </TableBody>
           </Table>
+          <CrmPagination
+            basePath="/crm/student"
+            page={page}
+            totalPages={totalPages}
+          />
         </CardContent>
       </Card>
     </>

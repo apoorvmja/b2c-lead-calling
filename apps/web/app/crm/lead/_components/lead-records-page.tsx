@@ -29,6 +29,7 @@ import {
 import { VobizCallWrapper } from "@/app/(dialer)/_components/vobiz-call-wrapper";
 
 import { createLeadHistory } from "../actions";
+import { CrmPagination } from "../../_components/crm-pagination";
 import { StatusBadge } from "../../_components/status-badge";
 import { LeadHistoryForm } from "./lead-history-form";
 import { LeadHistoryTable } from "./lead-history-table";
@@ -46,6 +47,10 @@ export function LeadRecordsPage({
   tableDescription,
   emptyMessage,
   leads,
+  totalCount = leads.length,
+  page,
+  pageSize,
+  basePath,
 }: {
   title: string;
   description: string;
@@ -54,7 +59,13 @@ export function LeadRecordsPage({
   tableDescription: string;
   emptyMessage: string;
   leads: LeadWithAssignedUser[];
+  totalCount?: number;
+  page?: number;
+  pageSize?: number;
+  basePath?: string;
 }) {
+  const totalPages = pageSize ? Math.ceil(totalCount / pageSize) : 1;
+
   return (
     <>
       <div className="flex items-center justify-between gap-3">
@@ -74,7 +85,7 @@ export function LeadRecordsPage({
       <Card>
         <CardHeader>
           <CardDescription>{countLabel}</CardDescription>
-          <CardTitle className="text-3xl">{leads.length}</CardTitle>
+          <CardTitle className="text-3xl">{totalCount}</CardTitle>
         </CardHeader>
       </Card>
 
@@ -161,6 +172,13 @@ export function LeadRecordsPage({
               )}
             </TableBody>
           </Table>
+          {page && pageSize && basePath ? (
+            <CrmPagination
+              basePath={basePath}
+              page={page}
+              totalPages={totalPages}
+            />
+          ) : null}
         </CardContent>
       </Card>
     </>
