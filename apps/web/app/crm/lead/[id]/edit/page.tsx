@@ -63,6 +63,7 @@ export default async function EditLeadPage({
         users={users}
         lead={lead}
         submitLabel="Update Lead"
+        lockProtectedFields
       />
 
       <div className="flex justify-end">

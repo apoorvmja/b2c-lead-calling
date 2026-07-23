@@ -87,7 +87,12 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {studentNav.map((item) => (
-                    <CrmNavLink key={item.href} {...item} icon="students" />
+                    <CrmNavLink
+                      key={item.href}
+                      {...item}
+                      icon="students"
+                      exact={item.href === "/crm/student"}
+                    />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -98,7 +103,12 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {leadNav.map((item) => (
-                    <CrmNavLink key={item.href} {...item} icon="leads" />
+                    <CrmNavLink
+                      key={item.href}
+                      {...item}
+                      icon="leads"
+                      exact={item.href === "/crm/lead"}
+                    />
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>

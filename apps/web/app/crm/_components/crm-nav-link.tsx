@@ -29,13 +29,18 @@ export function CrmNavLink({
   title,
   href,
   icon,
+  exact = false,
 }: {
   title: string;
   href: string;
   icon: keyof typeof icons;
+  exact?: boolean;
 }) {
   const pathname = usePathname();
-  const isActive = href === "/crm" ? pathname === href : pathname.startsWith(href);
+  const isActive =
+    href === "/crm" || exact
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`);
   const Icon = icons[icon];
 
   return (

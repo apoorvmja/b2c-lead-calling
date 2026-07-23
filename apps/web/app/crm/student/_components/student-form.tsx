@@ -99,6 +99,8 @@ export function StudentForm({
             <Input
               name="enrollmentNumber"
               defaultValue={student?.enrollmentNumber ?? enrollmentNumber ?? ""}
+              className="opacity-50"
+              readOnly
               required
             />
           </Field>

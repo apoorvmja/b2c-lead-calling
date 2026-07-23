@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 const selectClassName =
   "h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
@@ -51,20 +52,23 @@ function SelectField({
   data,
   defaultValue,
   required = false,
+  locked = false,
 }: {
   name: string;
   label: string;
   data: Record<string, string>;
   defaultValue?: string | null;
   required?: boolean;
+  locked?: boolean;
 }) {
   return (
     <Field label={label} required={required}>
       <select
         name={name}
         required={required}
+        aria-disabled={locked}
         defaultValue={defaultValue ?? ""}
-        className={selectClassName}
+        className={cn(selectClassName, locked && "pointer-events-none opacity-50")}
       >
         <option value="">Select {label.toLowerCase()}</option>
         {Object.entries(data).map(([key, value]) => (
@@ -82,11 +86,13 @@ export function LeadForm({
   users,
   lead,
   submitLabel,
+  lockProtectedFields = false,
 }: {
   action: (formData: FormData) => Promise<void>;
   users: User[];
   lead?: Lead;
   submitLabel: string;
+  lockProtectedFields?: boolean;
 }) {
   return (
     <form action={action} className="grid gap-6">
@@ -97,10 +103,20 @@ export function LeadForm({
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Field label="Name" required>
-            <Input name="name" defaultValue={lead?.name ?? ""} required />
+            <Input
+              name="name"
+              defaultValue={lead?.name ?? ""}
+              disabled={lockProtectedFields}
+              required
+            />
           </Field>
           <Field label="Phone" required>
-            <Input name="phone" defaultValue={lead?.phone ?? ""} required />
+            <Input
+              name="phone"
+              defaultValue={lead?.phone ?? ""}
+              disabled={lockProtectedFields}
+              required
+            />
           </Field>
           <Field label="Email">
             <Input
@@ -132,13 +148,18 @@ export function LeadForm({
             label="Source"
             data={SOURCES}
             defaultValue={lead?.source}
+            locked={lockProtectedFields}
             required
           />
           <Field label="Assigned To">
             <select
               name="assignedToUserId"
               defaultValue={lead?.assignedToUserId ?? ""}
-              className={selectClassName}
+              tabIndex={lockProtectedFields ? -1 : undefined}
+              className={cn(
+                selectClassName,
+                lockProtectedFields && "pointer-events-none opacity-50",
+              )}
             >
               <option value="">
                 {users.length === 0
