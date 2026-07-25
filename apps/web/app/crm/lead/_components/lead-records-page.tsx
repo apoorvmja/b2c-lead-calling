@@ -69,7 +69,7 @@ export function LeadRecordsPage({
 }) {
   const totalPages = pageSize ? Math.ceil(totalCount / pageSize) : 1;
   const getIeltsProfileUrl = (phone: string) =>
-    `https://ieltsglobal.com/super-admin?student_phone=${encodeURIComponent(phone)}`;
+    `https://ieltsgoglobal.com/super-admin?student_phone=${encodeURIComponent(phone)}`;
 
   return (
     <>
