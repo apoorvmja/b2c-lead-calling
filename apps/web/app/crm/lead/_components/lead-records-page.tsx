@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { CallRecord, Lead, LeadHistory, User } from "@repo/db";
+import { SOURCES } from "@repo/shared";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +68,8 @@ export function LeadRecordsPage({
   paginationQuery?: string;
 }) {
   const totalPages = pageSize ? Math.ceil(totalCount / pageSize) : 1;
+  const getIeltsProfileUrl = (phone: string) =>
+    `https://ieltsglobal.com/super-admin?student_phone=${encodeURIComponent(phone)}`;
 
   return (
     <>
@@ -159,6 +162,22 @@ export function LeadRecordsPage({
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <VobizCallWrapper phoneNumber={lead.phone} />
+                        {lead.source === SOURCES.IELTS_GO_GLOBAL ? (
+                          <Button
+                            nativeButton={false}
+                            variant="outline"
+                            size="sm"
+                            render={
+                              <Link
+                                href={getIeltsProfileUrl(lead.phone)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              />
+                            }
+                          >
+                            IELTS
+                          </Button>
+                        ) : null}
                         <Button
                           nativeButton={false}
                           variant="outline"
