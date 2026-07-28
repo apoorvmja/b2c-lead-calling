@@ -1,18 +1,25 @@
 import type { ReactNode } from "react";
 
+import { redirect } from "next/navigation";
+import { LogOut } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { deleteAuthCookie } from "@/lib/auth-cookie";
 
 import { CrmNavLink } from "./_components/crm-nav-link";
 import { CrmThemeToggle } from "./_components/crm-theme-toggle";
@@ -47,6 +54,13 @@ const masterNav = [
   { title: "Interested Fields", href: "/crm/master/interested-fields" },
   { title: "Status", href: "/crm/master/status" },
 ];
+
+async function logout() {
+  "use server";
+
+  await deleteAuthCookie();
+  redirect("/login");
+}
 
 export default function CrmLayout({ children }: { children: ReactNode }) {
   return (
@@ -125,6 +139,19 @@ export default function CrmLayout({ children }: { children: ReactNode }) {
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
+
+          <SidebarFooter className="border-t border-sidebar-border">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <form action={logout}>
+                  <SidebarMenuButton render={<button type="submit" />}>
+                    <LogOut />
+                    <span>Logout</span>
+                  </SidebarMenuButton>
+                </form>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
           <SidebarRail />
         </Sidebar>
 

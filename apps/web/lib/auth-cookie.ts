@@ -9,6 +9,12 @@ export type AuthCookieUser = {
   role: UserRole;
 };
 
+export async function deleteAuthCookie() {
+  const { cookies } = await import("next/headers");
+
+  (await cookies()).delete(USER_COOKIE_NAME);
+}
+
 function base64UrlEncode(bytes: Uint8Array) {
   return btoa(String.fromCharCode(...bytes))
     .replaceAll("+", "-")
