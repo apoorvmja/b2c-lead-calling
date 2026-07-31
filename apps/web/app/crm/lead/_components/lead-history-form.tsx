@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 import { LEAD_ACTIVITIES, LEAD_STATUS } from "@repo/shared";
+import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,16 +16,50 @@ const selectClassName =
 const textareaClassName =
   "min-h-20 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? (
+        <>
+          <LoaderCircle className="animate-spin" />
+          Adding history...
+        </>
+      ) : (
+        "Add History"
+      )}
+    </Button>
+  );
+}
+
 export function LeadHistoryForm({
   action,
 }: {
   action: (formData: FormData) => Promise<void>;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState("");
   const [followUp, setFollowUp] = useState(true);
 
+  async function submitAction(formData: FormData) {
+    try {
+      await action(formData);
+      toast.success("History added");
+      formRef.current?.reset();
+      setStatus("");
+      setFollowUp(true);
+    } catch {
+      toast.error("Could not add history");
+    }
+  }
+
   return (
-    <form action={action} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <form
+      ref={formRef}
+      action={submitAction}
+      className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+    >
       <select
         name="status"
         required
@@ -76,7 +113,7 @@ export function LeadHistoryForm({
         />
       </div>
       <div className="md:col-span-2 xl:col-span-4">
-        <Button type="submit">Add History</Button>
+        <SubmitButton />
       </div>
     </form>
   );

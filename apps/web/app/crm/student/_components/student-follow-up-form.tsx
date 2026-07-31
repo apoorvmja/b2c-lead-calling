@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 import { STUDENT_STATUS } from "@repo/shared";
+import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,17 +23,51 @@ const statusesWithoutFollowUp = [
   STUDENT_STATUS.ON_HOLD,
 ];
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? (
+        <>
+          <LoaderCircle className="animate-spin" />
+          Adding follow up...
+        </>
+      ) : (
+        "Add Follow Up"
+      )}
+    </Button>
+  );
+}
+
 export function StudentFollowUpForm({
   action,
 }: {
   action: (formData: FormData) => Promise<void>;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState("");
   const [followUp, setFollowUp] = useState(true);
   const canSkipFollowUp = statusesWithoutFollowUp.includes(status as never);
 
+  async function submitAction(formData: FormData) {
+    try {
+      await action(formData);
+      toast.success("Follow up added");
+      formRef.current?.reset();
+      setStatus("");
+      setFollowUp(true);
+    } catch {
+      toast.error("Could not add follow up");
+    }
+  }
+
   return (
-    <form action={action} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <form
+      ref={formRef}
+      action={submitAction}
+      className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+    >
       <select
         name="status"
         required
@@ -76,7 +113,7 @@ export function StudentFollowUpForm({
         />
       </div>
       <div className="md:col-span-2 xl:col-span-4">
-        <Button type="submit">Add Follow Up</Button>
+        <SubmitButton />
       </div>
     </form>
   );
